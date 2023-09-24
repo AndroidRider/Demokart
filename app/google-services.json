@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "376323412945",
+    "project_id": "demokart-38c8f",
+    "storage_bucket": "demokart-38c8f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:376323412945:android:24631be44dbd8cc48146f0",
+        "android_client_info": {
+          "package_name": "com.androidrider.demokart"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgXmr6aiv997SvPy8sLWBsXn2mcvdNF1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
