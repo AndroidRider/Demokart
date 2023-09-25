@@ -23,6 +23,15 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
+        // Check for the "openProfileFragment" extra
+        val openProfileFragment = intent.getBooleanExtra("openProfileFragment", false)
+        // If the extra is true, navigate to the "Profile" fragment
+        if (openProfileFragment) {
+            val navController = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
+                ?.findNavController()
+            navController?.navigate(R.id.profileFragment)
+        }
+
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
         val navController = navHostFragment!!.findNavController()
 
@@ -47,9 +56,9 @@ class MainActivity : AppCompatActivity() {
                     navController.navigate(R.id.cartFragment)
                 }
 
-                R.id.moreFragment -> {
+                R.id.profileFragment -> {
                     i = 2
-                    navController.navigate(R.id.moreFragment)
+                    navController.navigate(R.id.profileFragment)
                 }
             }
             true

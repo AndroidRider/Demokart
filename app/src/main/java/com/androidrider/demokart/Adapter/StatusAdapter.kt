@@ -3,14 +3,13 @@ package com.androidrider.demokart.Adapter
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.androidrider.demokart.Model.StatusModel
 import com.androidrider.demokart.R
-import com.androidrider.demokart.databinding.OrdersStatusLayoutBinding
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
+import com.androidrider.demokart.databinding.OrderStatusLayoutBinding
+import com.bumptech.glide.Glide
+
 
 class StatusAdapter(val context: Context, val list: ArrayList<StatusModel>) :
     RecyclerView.Adapter<StatusAdapter.OrderViewHolder>() {
@@ -19,7 +18,7 @@ class StatusAdapter(val context: Context, val list: ArrayList<StatusModel>) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder {
 
         val binding =
-            OrdersStatusLayoutBinding.inflate(LayoutInflater.from(context), parent, false)
+            OrderStatusLayoutBinding.inflate(LayoutInflater.from(context), parent, false)
         return OrderViewHolder(binding)
     }
 
@@ -30,10 +29,13 @@ class StatusAdapter(val context: Context, val list: ArrayList<StatusModel>) :
 
     override fun onBindViewHolder(holder: OrderViewHolder, position: Int) {
 
-        holder.binding.productTitle.text = list[position].name
+        val listData = list[position]
 
-        val price = list[position].price
-        holder.binding.productPrice.text = "₹$price"
+        holder.binding.productTitle.text = listData.name
+        holder.binding.productPrice.text = "₹${listData.price}"
+
+        val productImage = listData.coverImage
+        Glide.with(context).load(productImage).into(holder.binding.imageView)
 
 
         when (list[position].status) {
@@ -59,7 +61,7 @@ class StatusAdapter(val context: Context, val list: ArrayList<StatusModel>) :
         }
     }
 
-    class OrderViewHolder(val binding: OrdersStatusLayoutBinding) :
+    class OrderViewHolder(val binding: OrderStatusLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
     }

@@ -6,10 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import com.androidrider.demokart.Adapter.CartAdapter
 import com.androidrider.demokart.Adapter.WatchListAdapter
-import com.androidrider.demokart.R
-import com.androidrider.demokart.databinding.FragmentMoreBinding
 import com.androidrider.demokart.databinding.FragmentWatchListBinding
 import com.androidrider.demokart.roomdb.MyDatabase
 

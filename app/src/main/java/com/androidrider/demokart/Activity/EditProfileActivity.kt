@@ -7,28 +7,25 @@ import android.os.Bundle
 import android.widget.Toast
 import com.androidrider.demokart.R
 import com.androidrider.demokart.databinding.ActivityAddressBinding
-import com.androidrider.demokart.databinding.ActivityMainBinding
+import com.androidrider.demokart.databinding.ActivityEditProfileBinding
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class AddressActivity : AppCompatActivity() {
+class EditProfileActivity : AppCompatActivity() {
 
-    lateinit var binding: ActivityAddressBinding
+    lateinit var binding: ActivityEditProfileBinding
+
     private lateinit var preferences: SharedPreferences
-    lateinit var totalCost: String
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAddressBinding.inflate(layoutInflater)
+        binding = ActivityEditProfileBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         preferences = this.getSharedPreferences("user", MODE_PRIVATE)
 
-        totalCost = intent.getStringExtra("totalCost")!!
-
         loadUserInfo()
 
-        binding.btnProceed.setOnClickListener {
+        binding.SaveButton.setOnClickListener {
             validateData(
                 binding.edtUserName.text.toString(),
                 binding.edtPhoneNumber.text.toString(),
@@ -80,12 +77,15 @@ class AddressActivity : AppCompatActivity() {
             .update(map)
             .addOnSuccessListener {
 
-                val b = Bundle()
-                b.putStringArrayList("productIds", intent.getStringArrayListExtra("productIds"))
-                b.putString("totalCost", totalCost)
-                val intent = Intent(this, CheckoutActivity::class.java)
-                intent.putExtras(b)
+                // Create an intent to open MainActivity
+                val intent = Intent(this, MainActivity::class.java)
+                // Add an extra to indicate that you want to open the "Profile" fragment
+                intent.putExtra("openProfileFragment", true)
+                // Start the MainActivity
                 startActivity(intent)
+                finish() // Finish the EditProfileActivity to prevent going back to it.
+
+
 
             }.addOnFailureListener {
                 Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()

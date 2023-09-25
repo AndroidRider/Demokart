@@ -82,18 +82,19 @@ class CheckoutActivity : AppCompatActivity(), PaymentResultListener {
                 lifecycleScope.launch(Dispatchers.IO){
                     dao.deleteProduct(ProductModel(productId))
                 }
-                saveData(it.getString("productName"), it.getString("productSp"),productId
+                saveData(it.getString("productName"),it.getString("productCoverImage"), it.getString("productSp"),productId
                 )
             }
     }
 
-    private fun saveData(name: String?, price: String?, productId: String) {
+    private fun saveData(name: String?, coverImage:String?, price: String?, productId: String) {
 
         val preferences = this.getSharedPreferences("user", MODE_PRIVATE)
         val data = hashMapOf<String, Any>()
         data["name"] = name!!
         data["price"] = price!!
         data["productId"] = productId
+        data["coverImage"] = coverImage!!
         data["status"] = "Ordered"
         data["userId"] = preferences.getString("number", "")!!
 

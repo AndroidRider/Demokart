@@ -25,9 +25,9 @@
         android:label="fragment_cart"
         tools:layout="@layout/fragment_cart" />
     <fragment
-        android:id="@+id/moreFragment"
-        android:name="com.androidrider.demokart.Fragment.MoreFragment"
+        android:id="@+id/profileFragment"
+        android:name="com.androidrider.demokart.Fragment.ProfileFragment"
         android:label="fragment_more"
-        tools:layout="@layout/fragment_more" />
+        tools:layout="@layout/fragment_profile" />
 
 </navigation>

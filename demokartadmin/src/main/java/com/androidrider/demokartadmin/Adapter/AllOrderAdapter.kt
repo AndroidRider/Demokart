@@ -10,17 +10,16 @@ import androidx.recyclerview.widget.RecyclerView
 import com.androidrider.demokartadmin.Model.AllOrderModel
 import com.androidrider.demokartadmin.R
 import com.androidrider.demokartadmin.databinding.AllOrdersItemLayoutBinding
+import com.bumptech.glide.Glide
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 class AllOrderAdapter(val context: Context, val list: ArrayList<AllOrderModel>) :
     RecyclerView.Adapter<AllOrderAdapter.OrderViewHolder>() {
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder {
 
-        val binding =
-            AllOrdersItemLayoutBinding.inflate(LayoutInflater.from(context), parent, false)
+        val binding = AllOrdersItemLayoutBinding.inflate(LayoutInflater.from(context), parent, false)
         return OrderViewHolder(binding)
     }
 
@@ -31,10 +30,14 @@ class AllOrderAdapter(val context: Context, val list: ArrayList<AllOrderModel>) 
 
     override fun onBindViewHolder(holder: OrderViewHolder, position: Int) {
 
-        holder.binding.productTitle.text = list[position].name
+        val listData = list[position]
 
-        val price = list[position].price
-        holder.binding.productPrice.text = "₹$price"
+        holder.binding.productTitle.text = listData.name
+
+        holder.binding.productPrice.text = "₹${listData.price}"
+
+        val productImage = listData.coverImage
+        Glide.with(context).load(productImage).into(holder.binding.imageView)
 
         holder.binding.cancelButton.setOnClickListener {
             updateStatus("Canceled", list[position].orderId!!)
