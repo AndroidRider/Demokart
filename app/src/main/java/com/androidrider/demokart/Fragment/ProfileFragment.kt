@@ -12,15 +12,14 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.androidrider.demokart.Activity.EditProfileActivity
 import com.androidrider.demokart.Activity.LoginActivity
-import com.androidrider.demokart.Adapter.StatusAdapter
-import com.androidrider.demokart.Model.StatusModel
 import com.androidrider.demokart.R
 import com.androidrider.demokart.databinding.FragmentProfileBinding
 import com.bumptech.glide.Glide
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -30,8 +29,8 @@ class ProfileFragment : Fragment() {
 
     private lateinit var binding: FragmentProfileBinding
     private lateinit var sharedPreferences: SharedPreferences
-    private val list: ArrayList<StatusModel> = ArrayList()
 
+    // Open Gallery For Cover Image
     private var coverImageUrl: Uri? = null
     private val launchCoverGalleryActivity = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -43,6 +42,7 @@ class ProfileFragment : Fragment() {
         }
     }
 
+    // Open Gallery For Profile Image
     private var profileImageUrl: Uri? = null
     private val launchProfileGalleryActivity = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -60,27 +60,35 @@ class ProfileFragment : Fragment() {
     ): View? {
         binding = FragmentProfileBinding.inflate(layoutInflater)
 
+        // Access the toolbar view - Show/Hide
+        val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
+        toolbar.visibility = View.GONE
+
         // Set up click listeners
         binding.coverImage.setOnClickListener { launchGallery(launchCoverGalleryActivity) }
         binding.profileImage.setOnClickListener { launchGallery(launchProfileGalleryActivity) }
 
-        loadUserInfo()
-        logout()
-        getOrderDetails()
 
+
+
+        // Edit Profile ClickListener
         binding.EditProfileButton.setOnClickListener {
             startActivity(Intent(requireActivity(), EditProfileActivity::class.java))
         }
 
+        // Calling Methods
+        loadUserInfo()
+
+
         return binding.root
     }
 
+    // Open Gallery For Image
     private fun launchGallery(callback: ActivityResultLauncher<Intent>) {
         val intent = Intent(Intent.ACTION_GET_CONTENT)
         intent.type = "image/*"
         callback.launch(intent)
     }
-
 
     private fun uploadImage(imageUri: Uri?, field: String) {
         imageUri?.let {
@@ -93,7 +101,11 @@ class ProfileFragment : Fragment() {
                     }
                 }
                 .addOnFailureListener {
-                    Toast.makeText(requireContext(), "Something went wrong with storage!", Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        requireContext(),
+                        "Something went wrong with storage!",
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
         }
@@ -122,63 +134,54 @@ class ProfileFragment : Fragment() {
             .document(preferences.getString("number", "")!!)
             .get()
             .addOnSuccessListener { documentSnapshot ->
+
                 val userData = documentSnapshot.data
-                binding.apply {
-                    textViewName.text = userData?.get("name") as? String
-                    textViewCity.text = userData?.get("city") as? String
-
-                    textViewNumber.text = userData?.get("phoneNumber") as? String
-                    textViewEmail.text = userData?.get("email") as? String
-                    textViewAddress.text = userData?.get("address") as? String
-                    textViewCity2.text = userData?.get("city") as? String
-                    textViewState.text = userData?.get("state") as? String
-                    textViewPinCode.text = userData?.get("pinCode") as? String
-
-                }
 
                 val coverImageUrl = userData?.get("coverImage") as? String
                 val profileImageUrl = userData?.get("profileImage") as? String
 
+                binding.apply {
+
+                    val phone = userData?.get("phoneNumber") as? String
+                    val email = userData?.get("email") as? String
+                    val address = userData?.get("address") as? String
+                    val pinCode = userData?.get("pinCode") as? String
+
+                    // Validating Data
+                    textViewEmail.text = if (email!!.isNotEmpty()) email else "Email"
+                    textViewNumber.text = if (phone!!.isNotEmpty()) "+91 $phone" else "Phone"
+                    textViewAddress.text = if (address!!.isNotEmpty()) address else "Address"
+                    textViewPinCode.text = if (pinCode!!.isNotEmpty()) "- $pinCode" else ""
+
+
+                    // Non-Validating Data
+                    textViewName.text = userData?.get("name") as? String
+                    textViewCityTop.text = userData?.get("city") as? String
+                    textViewCityBottom.text = userData?.get("city") as? String
+                    textViewState.text = userData?.get("state") as? String
+
+
+                }
+
                 // Load and display images using Glide
                 coverImageUrl?.let {
-                    Glide.with(requireContext()).load(it) .into(binding.coverImage)
+                    Glide.with(requireContext()).load(it).into(binding.coverImage)
                 }
 
+                // using the 'let' extension function to conditionally load an image into an ImageView using Glide.
+                // If the profileImageUrl is not null, Glide is used to load the image; otherwise, a default drawable is set.
                 profileImageUrl?.let {
                     Glide.with(requireContext()).load(it).into(binding.profileImage)
+                } ?: run {
+                    binding.profileImage.setImageResource(R.drawable.profile_preview)
                 }
+
+
             }
             .addOnFailureListener {
                 Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_SHORT).show()
             }
     }
 
-    private fun getOrderDetails() {
-        val preferences = requireContext().getSharedPreferences("user", AppCompatActivity.MODE_PRIVATE)
 
-        Firebase.firestore.collection("AllOrders")
-            .whereEqualTo("userId", preferences.getString("number", "")!!)
-            .get()
-            .addOnSuccessListener { querySnapshot ->
-                list.clear()
-                for (doc in querySnapshot) {
-                    val data = doc.toObject(StatusModel::class.java)
-                    list.add(data)
-                }
-                binding.recyclerView.adapter = StatusAdapter(requireContext(), list)
-            }
-            .addOnFailureListener {
-                Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_SHORT).show()
-            }
-    }
-
-    private fun logout() {
-        binding.logoutButton.setOnClickListener {
-            sharedPreferences = requireContext().getSharedPreferences("loginPrefs", MODE_PRIVATE)
-            val editor = sharedPreferences.edit()
-            editor.putBoolean("isLoggedIn", false)
-            editor.apply()
-            startActivity(Intent(requireContext(), LoginActivity::class.java))
-        }
-    }
 }

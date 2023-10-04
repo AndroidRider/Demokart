@@ -20,11 +20,5 @@ data class ProductModel(
     @ColumnInfo(name = "productSp")
     val productSp : String? = "",
 
-//    // for watchlist added
-//    @ColumnInfo(name = "productMrp")
-//    val productMrp : String? = "",
-//
-//    @ColumnInfo(name = "isFavorite")
-//    var isFavorite: Boolean = false // New field for favorite status
 
 )

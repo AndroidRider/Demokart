@@ -8,6 +8,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -16,6 +17,7 @@ import com.androidrider.demokartadmin.Adapter.CategoryAdapter
 import com.androidrider.demokartadmin.Model.CategoryModel
 import com.androidrider.demokartadmin.R
 import com.androidrider.demokartadmin.databinding.FragmentCategoryBinding
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -44,6 +46,10 @@ class CategoryFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentCategoryBinding.inflate(layoutInflater)
 
+        // Access the toolbar view - Show/Hide
+        val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
+        toolbar.visibility = GONE
+
         dialog = Dialog(requireContext())
         dialog.setContentView(R.layout.progress_layout)
         dialog.setCancelable(false)
@@ -56,7 +62,7 @@ class CategoryFragment : Fragment() {
                 launchGalleryActivity.launch(intent)
             }
 
-            btnCategory.setOnClickListener {
+            uploadCategoryButton.setOnClickListener {
                 validateData(binding.edtCategoryName.text.toString())
             }
         }

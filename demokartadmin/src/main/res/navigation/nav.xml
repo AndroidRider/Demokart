@@ -19,6 +19,18 @@
         <action
             android:id="@+id/action_homeFragment_to_sliderFragment"
             app:destination="@id/sliderFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_notificationReminderFragment"
+            app:destination="@id/notificationReminderFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_allOrderFragment"
+            app:destination="@id/allOrderFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_brandFragment"
+            app:destination="@id/brandFragment" />
     </fragment>
     <fragment
         android:id="@+id/addProductFragment"
@@ -38,10 +50,44 @@
         <action
             android:id="@+id/action_productFragment_to_addProductFragment"
             app:destination="@id/addProductFragment" />
+        <action
+            android:id="@+id/action_productFragment_to_editProductFragment"
+            app:destination="@id/editProductFragment" />
     </fragment>
     <fragment
         android:id="@+id/sliderFragment"
         android:name="com.androidrider.demokartadmin.Fragment.SliderFragment"
         android:label="fragment_slider"
         tools:layout="@layout/fragment_slider" />
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.androidrider.demokartadmin.Fragment.NotificationFragment"
+        android:label="fragment_notification"
+        tools:layout="@layout/fragment_notification" />
+    <fragment
+        android:id="@+id/notificationReminderFragment"
+        android:name="com.androidrider.demokartadmin.Fragment.NotificationReminderFragment"
+        android:label="fragment_notification_reminder"
+        tools:layout="@layout/fragment_notification_reminder" />
+    <fragment
+        android:id="@+id/allOrderFragment"
+        android:name="com.androidrider.demokartadmin.Fragment.AllOrderFragment"
+        android:label="fragment_all_order"
+        tools:layout="@layout/fragment_all_order" />
+    <fragment
+        android:id="@+id/editProductFragment"
+        android:name="com.androidrider.demokartadmin.Fragment.EditProductFragment"
+        android:label="fragment_edit_product"
+        tools:layout="@layout/fragment_edit_product" >
+
+        <argument
+            android:name="productId"
+            app:argType="string" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/brandFragment"
+        android:name="com.androidrider.demokartadmin.Fragment.BrandFragment"
+        android:label="fragment_brand"
+        tools:layout="@layout/fragment_brand" />
 </navigation>

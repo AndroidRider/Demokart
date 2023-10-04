@@ -13,6 +13,12 @@
         <action
             android:id="@+id/action_homeFragment_to_cartFragment"
             app:destination="@id/cartFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_allBrandViewFragment"
+            app:destination="@id/allBrandViewFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_allCategoryViewFragment"
+            app:destination="@id/allCategoryViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/watchListFragment"
@@ -28,6 +34,47 @@
         android:id="@+id/profileFragment"
         android:name="com.androidrider.demokart.Fragment.ProfileFragment"
         android:label="fragment_more"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+    </fragment>
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.androidrider.demokart.Fragment.NotificationFragment"
+        android:label="fragment_notification"
+        tools:layout="@layout/fragment_notification" />
+    <fragment
+        android:id="@+id/likeFragment"
+        android:name="com.androidrider.demokart.Fragment.LikeFragment"
+        android:label="fragment_like"
+        tools:layout="@layout/fragment_like" />
+    <fragment
+        android:id="@+id/myOrderFragment"
+        android:name="com.androidrider.demokart.Fragment.MyOrderFragment"
+        android:label="fragment_my_order"
+        tools:layout="@layout/fragment_my_order" />
+    <fragment
+        android:id="@+id/accountFragment"
+        android:name="com.androidrider.demokart.Fragment.AccountFragment"
+        android:label="fragment_account"
+        tools:layout="@layout/fragment_account" >
+        <action
+            android:id="@+id/action_accountFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_accountFragment_to_myOrderFragment"
+            app:destination="@id/myOrderFragment" />
+        <action
+            android:id="@+id/action_accountFragment_to_cartFragment"
+            app:destination="@id/cartFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/allBrandViewFragment"
+        android:name="com.androidrider.demokart.Fragment.AllBrandViewFragment"
+        android:label="fragment_all_brand_view"
+        tools:layout="@layout/fragment_all_brand_view" />
+    <fragment
+        android:id="@+id/allCategoryViewFragment"
+        android:name="com.androidrider.demokart.Fragment.AllCategoryViewFragment"
+        android:label="fragment_all_category_view"
+        tools:layout="@layout/fragment_all_category_view" />
 
 </navigation>

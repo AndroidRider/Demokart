@@ -33,21 +33,28 @@
             android:id="@+id/edtCategoryName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Category" />
+            android:hint="Category Title" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
     <Button
-        android:id="@+id/btnCategory"
+        android:id="@+id/uploadCategoryButton"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:layout_marginHorizontal="10dp"
+        android:padding="8dp"
         android:text="Upload Category"
+        android:backgroundTint="#00C853"
         android:textSize="20sp"
+        android:textAllCaps="false"
+        android:textColor="#fff"
         app:layout_constraintEnd_toEndOf="@+id/CategoryNameLayout"
         app:layout_constraintStart_toStartOf="@+id/CategoryNameLayout"
         app:layout_constraintTop_toBottomOf="@+id/CategoryNameLayout" />
+
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -59,5 +66,5 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnCategory" />
+        app:layout_constraintTop_toBottomOf="@+id/uploadBrandButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>

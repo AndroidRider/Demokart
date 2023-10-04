@@ -4,8 +4,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="8dp"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".Fragment.WatchListFragment">
+
+    <TextView
+        android:id="@+id/noDataTextView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textSize="22sp"
+        android:visibility="gone"
+        android:textColor="@color/black"
+        android:text="You have not added any Item"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/watchListRecyclerView"

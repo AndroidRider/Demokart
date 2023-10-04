@@ -33,15 +33,20 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        tools:listitem="@layout/image_item" />
+        tools:listitem="@layout/add_product_recycler_image__layout" />
 
     <Button
         android:id="@+id/UploadBtn"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="20dp"
+        android:padding="7dp"
         android:text="Upload Slider"
+        android:backgroundTint="#00C853"
+        android:textColor="#FFFFFF"
         android:textSize="20sp"
+        android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

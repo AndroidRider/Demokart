@@ -7,6 +7,7 @@ buildscript {
         maven ( url = "https://www.jitpack.io") // self- Client
     }
     dependencies {
+        classpath("com.google.gms:google-services:4.4.0")
         val nav_version = "2.7.2"
         classpath("androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version") //Admin, Client (both)
     }

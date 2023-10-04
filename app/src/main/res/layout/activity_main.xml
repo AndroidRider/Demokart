@@ -26,7 +26,8 @@
             android:fontFamily="@font/nunito_medium"
             android:textSize="16sp"
             android:background="@drawable/bg_search"
-            android:drawableLeft="@drawable/ic_search"
+            android:drawableStart="@drawable/ic_search"
+            android:inputType="text"
             android:drawablePadding="7dp"
             android:textColor="@color/black"
             android:maxLines="1" />
@@ -39,27 +40,50 @@
         android:layout_height="0dp"
         app:defaultNavHost="true"
         app:navGraph="@navigation/nav"
-        app:layout_constraintBottom_toTopOf="@+id/bottomBar"
+        app:layout_constraintBottom_toTopOf="@+id/viewTop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"/>
 
+    <View
+        android:id="@+id/viewTop"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#f1f1f1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/bottomBar"
+        />
+
         <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/bottomBar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+            android:layout_height="56dp"
             app:itemTextColor="@color/bottom_bar_text"
             app:itemIconTint="@color/bottom_bar_item"
-            app:itemPaddingTop="15dp"
-            app:itemPaddingBottom="10dp"
+            app:itemPaddingTop="10dp"
+            app:itemPaddingBottom="8dp"
+            app:labelVisibilityMode="labeled"
+            android:background="@color/white"
+            app:itemTextAppearanceInactive="@color/black"
             app:itemTextAppearanceActive="@style/BottomNavigationViewTextStyle"
             app:itemActiveIndicatorStyle="@android:color/transparent"
             android:layout_alignParentBottom="true"
-            app:itemBackground="@drawable/bottom_nav_indicator"
+            app:itemBackground="@drawable/style_bottom_nav_indicator"
             app:menu="@menu/bottom_nav"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/viewBottom"
+            app:layout_constraintTop_toTopOf="@+id/viewTop"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"/>
+
+    <View
+        android:id="@+id/viewBottom"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#f3f3f3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 <!--    <me.ibrahimsn.lib.SmoothBottomBar-->

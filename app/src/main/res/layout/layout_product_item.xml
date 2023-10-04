@@ -9,8 +9,9 @@
         android:id="@+id/cardView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="10dp"
-        app:cardCornerRadius="8dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginVertical="5dp"
+        app:cardCornerRadius="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +24,7 @@
             android:padding="4dp">
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/productImageView"
                 android:layout_width="140dp"
                 android:layout_height="140dp"
                 android:layout_margin="8dp"
@@ -33,52 +34,49 @@
                 tools:srcCompat="@tools:sample/avatars" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/tvProductName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="2"
                 android:padding="5dp"
                 android:text="Title"
-                android:fontFamily="@font/nunito_medium"
+                android:ellipsize="end"
                 android:textColor="#000"
                 android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:fontFamily="@font/nunito_medium"/>
 
-            <RelativeLayout
+            <include
+                layout="@layout/rating_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/tvProductSp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentStart="true"
                     android:layout_marginHorizontal="5dp"
-                    android:layout_marginVertical="5dp"
                     android:text="SP"
-                    android:fontFamily="@font/nunito_medium"
-                    android:textColor="#165dba"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
+                    android:textColor="@color/red"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:fontFamily="@font/nunito_medium"/>
 
                 <TextView
-                    android:id="@+id/textView3"
+                    android:id="@+id/tvProductMrp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:layout_toEndOf="@id/textView2"
+                    android:layout_marginTop="0dp"
                     android:text="MRP"
-                    android:fontFamily="@font/nunito_medium"
-                    android:textSize="12sp" />
+                    android:textSize="14sp"
+                    android:fontFamily="@font/nunito_medium"/>
 
-                <ImageView
-                    android:id="@+id/Favourite"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginTop="6dp"
-                    android:src="@drawable/ic_empty_bookmark"
-                    android:layout_alignParentEnd="true"/>
-            </RelativeLayout>
+
+            </LinearLayout>
 
         </LinearLayout>
 

@@ -15,7 +15,7 @@ class AddressActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityAddressBinding
     private lateinit var preferences: SharedPreferences
-    lateinit var totalCost: String
+    private lateinit var totalCost: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,7 +24,7 @@ class AddressActivity : AppCompatActivity() {
 
         preferences = this.getSharedPreferences("user", MODE_PRIVATE)
 
-        totalCost = intent.getStringExtra("totalCost")!!
+        totalCost = intent.getStringExtra("totalCost")!! // For both CartFragment and ProductDetailActivity
 
         loadUserInfo()
 
@@ -39,17 +39,11 @@ class AddressActivity : AppCompatActivity() {
                 binding.edtPinCode.text.toString()
             )
         }
+
     }
 
-    private fun validateData(
-        name: String,
-        number: String,
-        email: String,
-        address: String,
-        city: String,
-        state: String,
-        pinCode: String
-    ) {
+
+    private fun validateData( name: String,number: String, email: String, address: String, city: String, state: String, pinCode: String ) {
 
         if (name.isEmpty() || number.isEmpty() || email.isEmpty() ||
             address.isEmpty() || city.isEmpty() || state.isEmpty() || pinCode.isEmpty()
@@ -60,13 +54,7 @@ class AddressActivity : AppCompatActivity() {
         }
     }
 
-    private fun storeData(
-        email: String,
-        address: String,
-        city: String,
-        state: String,
-        pinCode: String
-    ) {
+    private fun storeData(email: String, address: String, city: String, state: String, pinCode: String) {
 
         val map = hashMapOf<String, Any>()
         map["email"] = email
@@ -80,12 +68,14 @@ class AddressActivity : AppCompatActivity() {
             .update(map)
             .addOnSuccessListener {
 
-                val b = Bundle()
-                b.putStringArrayList("productIds", intent.getStringArrayListExtra("productIds"))
-                b.putString("totalCost", totalCost)
-                val intent = Intent(this, CheckoutActivity::class.java)
-                intent.putExtras(b)
-                startActivity(intent)
+                val intent1 = Intent(this, CheckoutActivity::class.java)
+                intent1.putStringArrayListExtra("productIds", intent.getStringArrayListExtra("productIds"))
+                intent1.putExtra("totalCost", totalCost)
+
+                intent1.putExtra("productId", intent.getStringExtra("productId"))
+                intent1.putExtra("totalCost", totalCost)
+                startActivity(intent1)
+
 
             }.addOnFailureListener {
                 Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()

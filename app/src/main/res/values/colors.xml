@@ -5,10 +5,18 @@
     <color name="red">#D50000</color>
     <color name="green">#00C853</color>
 
+    <color name="mainColor">#26A69A</color>
+
+    <color name="accountTextColor">#000000</color>
+<!--    <color name="accountIconColor">#000000</color>-->
+    <color name="accountIconColor">@color/mainColor</color>
+
+
+    <color name="toolbarColor">#26A69A</color>
+    <color name="statusBarColor">@color/toolbarColor</color>
+
     <color name="viewColor">#B5AFAF</color>
 
-    <color name="toolbarColor">#517da2</color>
-    <color name="statusBarColor">#517da2</color>
 
     <color name="orderedTextColor">#6200EA</color>
     <color name="dispatchedTextColor">#FFAB00</color>
@@ -16,9 +24,12 @@
     <color name="canceledTextColor">#D50000</color>
 
     <color name="indicatorColor">#400014</color>
-    <color name="bottom_bar_text">#400014</color>
-    <color name="bottom_bar_item">#bc004c</color>
+    <color name="lineIndicatorColor">@color/mainColor</color>
+    <color name="bottom_bar_item">@color/mainColor</color>
+    <color name="bottom_bar_text">#000000</color>
     <color name="bottom_bar_background">#fef1f1</color>
     <color name="bottom_bar_indicator_color">#e7bdca</color>
+
+
 
 </resources>

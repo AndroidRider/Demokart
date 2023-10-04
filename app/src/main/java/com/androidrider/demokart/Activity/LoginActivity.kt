@@ -1,5 +1,6 @@
 package com.androidrider.demokart.Activity
 
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -26,6 +27,7 @@ class LoginActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityLoginBinding
     lateinit var progressBar: ProgressBar
+    lateinit var dialog : Dialog
 
     lateinit var sharedPreferences: SharedPreferences
 
@@ -33,6 +35,10 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        dialog = Dialog(this)
+        dialog.setContentView(R.layout.progress_layout)
+        dialog.setCancelable(false)
 
         sharedPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE)
         // Check if the user is already logged in
@@ -62,11 +68,14 @@ class LoginActivity : AppCompatActivity() {
 
 
     private fun sendOTP(number: String) {
+
         //Progressbar Code
-        progressBar = binding.spinKit
-        val doubleBounce: Sprite = Circle()
-        progressBar.indeterminateDrawable = doubleBounce
-        progressBar.visibility = View.VISIBLE
+//        progressBar = binding.spinKit
+//        val doubleBounce: Sprite = Circle()
+//        progressBar.indeterminateDrawable = doubleBounce
+//        progressBar.visibility = View.VISIBLE
+        dialog.show()
+
 
         val options = PhoneAuthOptions.newBuilder(FirebaseAuth.getInstance())
             .setPhoneNumber("+91$number") // Phone number to verify
@@ -88,7 +97,9 @@ class LoginActivity : AppCompatActivity() {
 
             saveLoginStatus(true)
 
-            progressBar.visibility = View.GONE
+//            progressBar.visibility = View.GONE
+            dialog.dismiss()
+
             val intent = Intent(this@LoginActivity, OTPActivity::class.java)
             intent.putExtra("verificationId", verificationId)
             intent.putExtra("number", binding.edtPhoneNumber.text.toString())
@@ -108,6 +119,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun navigateToMain() {
         startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+//        startActivity(Intent(this@LoginActivity, NotificationTestActivity::class.java))
         finish()
     }
 

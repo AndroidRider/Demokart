@@ -4,13 +4,13 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.androidrider.demokartadmin.databinding.ImageItemBinding
+import com.androidrider.demokartadmin.databinding.AddProductRecyclerImageLayoutBinding
 
 class AddProductImageAdapter(val list:ArrayList<Uri>):
     RecyclerView.Adapter<AddProductImageAdapter.AddProductImageViewholder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddProductImageViewholder {
-        val binding = ImageItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding = AddProductRecyclerImageLayoutBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return AddProductImageViewholder(binding)
     }
 
@@ -18,10 +18,13 @@ class AddProductImageAdapter(val list:ArrayList<Uri>):
         return list.size
     }
     override fun onBindViewHolder(holder: AddProductImageViewholder, position: Int) {
-        holder.binding.itemImage.setImageURI(list[position])
+
+        val imageList = list[position]
+        holder.binding.itemImage.setImageURI(imageList)
     }
 
-    class AddProductImageViewholder(val binding : ImageItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class AddProductImageViewholder(val binding : AddProductRecyclerImageLayoutBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
     }
 }

@@ -1,11 +1,13 @@
 package com.androidrider.demokart.Activity
 
+import android.app.Dialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
+import com.androidrider.demokart.R
 import com.androidrider.demokart.databinding.ActivityOtpactivityBinding
 import com.github.ybq.android.spinkit.sprite.Sprite
 import com.github.ybq.android.spinkit.style.Circle
@@ -19,10 +21,16 @@ class OTPActivity : AppCompatActivity() {
     lateinit var binding: ActivityOtpactivityBinding
     lateinit var progressBar: ProgressBar
 
+    lateinit var dialog : Dialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityOtpactivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        dialog = Dialog(this)
+        dialog.setContentView(R.layout.progress_layout)
+        dialog.setCancelable(false)
 
 
         binding.btnVerifyOTP.setOnClickListener {
@@ -36,11 +44,13 @@ class OTPActivity : AppCompatActivity() {
 
     private fun verifyUser(otp: String) {
 
-        //Progressbar Code
-        progressBar = binding.spinKit
-        val doubleBounce: Sprite = Circle()
-        progressBar.indeterminateDrawable = doubleBounce
-        progressBar.visibility = View.VISIBLE
+//        //Progressbar Code
+//        progressBar = binding.spinKit
+//        val doubleBounce: Sprite = Circle()
+//        progressBar.indeterminateDrawable = doubleBounce
+//        progressBar.visibility = View.VISIBLE
+
+        dialog.show()
 
         val credential =
             PhoneAuthProvider.getCredential(intent.getStringExtra("verificationId")!!, otp)
@@ -59,8 +69,10 @@ class OTPActivity : AppCompatActivity() {
                     editor.apply()
 
                     progressBar.visibility = View.GONE
+                    dialog.dismiss()
                     startActivity(Intent(this@OTPActivity, MainActivity::class.java))
                     finish()
+
                 } else {
 
                     Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()

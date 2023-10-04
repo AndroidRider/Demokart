@@ -1,5 +1,7 @@
 package com.androidrider.demokartadmin.Model
 
+import com.google.firebase.Timestamp
+
 data class AllOrderModel(
 
     val name : String? = "",
@@ -8,5 +10,10 @@ data class AllOrderModel(
     val userId : String? = "",
     val productId : String? = "",
     val orderId : String? = "",
-    val status : String? = ""
+    val status : String? = "",
+
+    val timestamp: Timestamp? = null
 )
+{
+    constructor() : this("", "", null)
+}

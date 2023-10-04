@@ -14,6 +14,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.androidrider.demokartadmin.Adapter.AddProductImageAdapter
 import com.androidrider.demokartadmin.R
 import com.androidrider.demokartadmin.databinding.FragmentSliderBinding
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -45,6 +46,10 @@ class SliderFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentSliderBinding.inflate(layoutInflater)
+
+        // Access the toolbar view - Show/Hide
+        val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
+        toolbar.visibility = View.GONE
 
         list = ArrayList()
         listImages = ArrayList()

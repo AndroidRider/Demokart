@@ -125,7 +125,6 @@
             android:paddingTop="8dp"
             android:paddingBottom="10dp"
             android:background="@drawable/bg_btn"
-            android:backgroundTint="@color/green"
             android:fontFamily="@font/nunito_medium"
             android:text="Save"
             android:textAllCaps="false"

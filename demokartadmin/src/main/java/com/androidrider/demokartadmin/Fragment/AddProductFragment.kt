@@ -8,15 +8,17 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import com.androidrider.demokartadmin.Adapter.AddProductImageAdapter
-import com.androidrider.demokartadmin.Model.AddProductModel
+import com.androidrider.demokartadmin.Model.ProductModel
 import com.androidrider.demokartadmin.Model.CategoryModel
 import com.androidrider.demokartadmin.R
 import com.androidrider.demokartadmin.databinding.FragmentAddProductBinding
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -62,6 +64,10 @@ class AddProductFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentAddProductBinding.inflate(layoutInflater)
 
+        // Access the toolbar view - Show/Hide
+        val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
+        toolbar.visibility = GONE
+
         list = ArrayList()
         listImages = ArrayList()
 
@@ -76,7 +82,7 @@ class AddProductFragment : Fragment() {
             launchGalleryActivity.launch(intent)
         }
 
-        //1st
+
         binding.productImgBtn.setOnClickListener {
             val intent = Intent("android.intent.action.GET_CONTENT")
             intent.type = "image/*"
@@ -100,10 +106,6 @@ class AddProductFragment : Fragment() {
             binding.productNameEdt.requestFocus()
             binding.productNameEdt.error = "Empty"
 
-        } else if (binding.productDescriptionEdt.text.toString().isEmpty()) {
-            binding.productDescriptionEdt.requestFocus()
-            binding.productDescriptionEdt.error = "Empty"
-
         } else if (binding.productMrpEdt.text.toString().isEmpty()) {
             binding.productMrpEdt.requestFocus()
             binding.productMrpEdt.error = "Empty"
@@ -111,8 +113,15 @@ class AddProductFragment : Fragment() {
         } else if (binding.productSpEdt.text.toString().isEmpty()) {
             binding.productSpEdt.requestFocus()
             binding.productSpEdt.error = "Empty"
+        }else if (binding.productDescriptionEdt.text.toString().isEmpty()) {
+            binding.productDescriptionEdt.requestFocus()
+            binding.productDescriptionEdt.error = "Empty"
 
-        } else if (coverImage == null) {
+        }else if (binding.productFeaturesEdt.text.toString().isEmpty()) {
+            binding.productFeaturesEdt.requestFocus()
+            binding.productFeaturesEdt.error = "Empty"
+
+        }else if (coverImage == null) {
             Toast.makeText(requireContext(), "Please select cover image", Toast.LENGTH_SHORT).show()
 
         } else if (list.size < 1) {
@@ -120,11 +129,11 @@ class AddProductFragment : Fragment() {
                 .show()
 
         } else {
-            uploadimage()
+            uploadImage()
         }
     }
 
-    private fun uploadimage() {
+    private fun uploadImage() {
         dialog.show()
         val fileName = UUID.randomUUID().toString() + ".jpg"
         val refStorage = FirebaseStorage.getInstance().reference.child("Products/$fileName")
@@ -160,7 +169,6 @@ class AddProductFragment : Fragment() {
                         i++
                         uploadProductImage()
                     }
-
                 }
             }
             .addOnFailureListener {
@@ -176,14 +184,15 @@ class AddProductFragment : Fragment() {
     private fun storedata() {
         val db = Firebase.firestore.collection("Products")
         val key = db.document().id
-        val data = AddProductModel(
-            binding.productNameEdt.text.toString(),
-            binding.productDescriptionEdt.text.toString(),
-            coverImgUrl.toString(),
-            categoryList[binding.productCategoryDropdown.selectedItemPosition],
+        val data = ProductModel(
             key,
+            binding.productNameEdt.text.toString(),
             binding.productMrpEdt.text.toString(),
             binding.productSpEdt.text.toString(),
+            binding.productDescriptionEdt.text.toString(),
+            binding.productFeaturesEdt.text.toString(),
+            coverImgUrl.toString(),
+            categoryList[binding.productCategoryDropdown.selectedItemPosition],
             listImages
         )
 
@@ -194,10 +203,10 @@ class AddProductFragment : Fragment() {
                 Toast.makeText(requireContext(), "product Added Successfully!", Toast.LENGTH_SHORT).show()
 
                 binding.productNameEdt.text = null
-                binding.productDescriptionEdt.text = null
                 binding.productMrpEdt.text = null
                 binding.productSpEdt.text = null
-                binding.productNameEdt.text = null
+                binding.productDescriptionEdt.text = null
+                binding.productFeaturesEdt.text = null
                 binding.productCoverImg.visibility = View.GONE
                 list.clear()
                 adapter.notifyDataSetChanged() // Clear the RecyclerView items
@@ -216,10 +225,11 @@ class AddProductFragment : Fragment() {
                 val data = doc.toObject(CategoryModel::class.java)
                 categoryList.add(data!!.category!!)
             }
-            categoryList.add(0, "select Category")
+            categoryList.add(0, "Select Category")
             val arrayAdapter =
                 ArrayAdapter(requireContext(), R.layout.dropdown_item_layout, categoryList)
             binding.productCategoryDropdown.adapter = arrayAdapter
         }
     }
+
 }
