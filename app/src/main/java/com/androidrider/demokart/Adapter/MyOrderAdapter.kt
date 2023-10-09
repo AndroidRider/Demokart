@@ -11,7 +11,7 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.androidrider.demokart.Model.MyOrderModel
 import com.androidrider.demokart.R
-import com.androidrider.demokart.databinding.YourOrderLayoutBinding
+import com.androidrider.demokart.databinding.MyOrderLayoutBinding
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -30,7 +30,7 @@ class MyOrderAdapter(val context: Context, val list: ArrayList<MyOrderModel>,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): OrderViewHolder {
 
-        val binding =YourOrderLayoutBinding.inflate(LayoutInflater.from(context), parent, false)
+        val binding = MyOrderLayoutBinding.inflate(LayoutInflater.from(context), parent, false)
         return OrderViewHolder(binding)
     }
 
@@ -43,8 +43,9 @@ class MyOrderAdapter(val context: Context, val list: ArrayList<MyOrderModel>,
 
         val listData = list[position]
 
-        holder.binding.productTitle.text = listData.name
-        holder.binding.productPrice.text = "₹${listData.price}"
+        holder.binding.productTitle.text = listData.productName
+        holder.binding.tvQuantity.text = listData.quantity
+        holder.binding.tvTotalPrice.text = "₹${listData.totalPrice}"
 
         val productImage = listData.coverImage
         Glide.with(context).load(productImage).into(holder.binding.imageView)
@@ -103,7 +104,7 @@ class MyOrderAdapter(val context: Context, val list: ArrayList<MyOrderModel>,
             .show()
     }
 
-    fun updateStatus(str: String, doc: String) {
+    private fun updateStatus(str: String, doc: String) {
 
         val data = hashMapOf<String, Any>()
         data["status"] = str
@@ -162,7 +163,7 @@ class MyOrderAdapter(val context: Context, val list: ArrayList<MyOrderModel>,
     }
 
 
-    class OrderViewHolder(val binding: YourOrderLayoutBinding) :
+    class OrderViewHolder(val binding: MyOrderLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
     }

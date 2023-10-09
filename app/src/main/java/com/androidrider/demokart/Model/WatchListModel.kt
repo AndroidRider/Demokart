@@ -7,9 +7,9 @@ data class WatchListModel (
     val productSp : String? = "",
     val productMrp : String? = "",
     val productImage : String? = "",
+    val rating : Double = 0.0,
+
+    var isInWatchlist: Boolean = false,
 
 
-    //    var isInWatchList: Boolean = false,
-
-//    val favorite: Boolean = false // Default to false
 )

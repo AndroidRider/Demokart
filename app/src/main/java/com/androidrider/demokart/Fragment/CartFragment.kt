@@ -1,4 +1,3 @@
-
 package com.androidrider.demokart.Fragment
 
 import CartModel
@@ -7,10 +6,12 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.androidrider.demokart.Activity.AddressActivity
+import androidx.navigation.fragment.findNavController
+import com.androidrider.demokart.Activity.CheckoutActivity
 import com.androidrider.demokart.Adapter.CartAdapter
 import com.androidrider.demokart.R
 import com.androidrider.demokart.databinding.FragmentCartBinding
@@ -19,11 +20,13 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 
-class CartFragment : Fragment() {
+class CartFragment : Fragment(), CartAdapter.CartListener {
 
     lateinit var binding: FragmentCartBinding
+    lateinit var list: ArrayList<String>
 
-    lateinit var list : ArrayList<String>
+    private val cartItemList = mutableListOf<CartModel>()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -34,24 +37,25 @@ class CartFragment : Fragment() {
 
         // Access the toolbar view - Show/Hide
         val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
-        toolbar.visibility = View.VISIBLE
+        toolbar.visibility = GONE
+
 
         list = ArrayList()
 
-        val preference = requireContext().getSharedPreferences("info", AppCompatActivity.MODE_PRIVATE)
+        val preference =requireContext().getSharedPreferences("info", AppCompatActivity.MODE_PRIVATE)
         val editor = preference.edit()
         editor.putBoolean("isCart", false)
         editor.apply()
 
         getCartData()
 
-
         return binding.root
     }
 
     private fun getCartData() {
 
-       val preferences = requireContext().getSharedPreferences("user", AppCompatActivity.MODE_PRIVATE)
+        val preferences =
+            requireContext().getSharedPreferences("user", AppCompatActivity.MODE_PRIVATE)
 
         val currentUserNumber = preferences.getString("number", "")
 
@@ -61,7 +65,8 @@ class CartFragment : Fragment() {
 
             cartCollectionRef.get()
                 .addOnSuccessListener { querySnapshot ->
-                    val cartItemList = mutableListOf<CartModel>()
+
+//                    val cartItemList = mutableListOf<CartModel>()
 
                     for (document in querySnapshot) {
                         val productId = document.id
@@ -69,33 +74,44 @@ class CartFragment : Fragment() {
                         val productSp = document.getString("productSp") ?: ""
                         val productMrp = document.getString("productMrp") ?: ""
                         val productImage = document.getString("productImage") ?: ""
+
+                        val rating = document.getDouble("rating")
+
+
+                        val quantityLong = document.getLong("quantity")
+                        val quantityInt = quantityLong?.toInt() ?: 0
                         // Retrieve other fields as needed
 
-                        val cartItem = CartModel(productId, productName, productSp, productMrp, productImage)
+                        val cartItem = CartModel(productId,productName,productSp,productMrp, productImage, rating!!,
+                            quantityInt)
                         cartItemList.add(cartItem)
                     }
-                    binding.cartRecycler.adapter = CartAdapter(requireContext(), cartItemList, Firebase.firestore, currentUserNumber)
+                    binding.cartRecycler.adapter = CartAdapter( requireContext(), cartItemList, Firebase.firestore,
+                        currentUserNumber,this
+                    )
 
                     list.clear()
                     for (data in cartItemList) {
                         list.add(data.productId!!)
+
+                        // Update cart summary
+                        updateCartSummary(cartItemList)
                     }
                     // Check if the cart is empty and show/hide the message accordingly
                     val emptyCartMessage = binding.emptyCartMessage
-                    val detailCard = binding.cardView
+                    val checkoutButton = binding.checkoutButton
                     if (cartItemList.isEmpty()) {
-                        detailCard.visibility = View.GONE
+                        checkoutButton.visibility = View.GONE
                         emptyCartMessage.visibility = View.VISIBLE
                     } else {
                         emptyCartMessage.visibility = View.GONE
-                        detailCard.visibility = View.VISIBLE
+                        checkoutButton.visibility = View.VISIBLE
                     }
-                    // Update cart summary
-                    updateCartSummary(cartItemList)
                 }
                 .addOnFailureListener {
                     // Handle the failure to retrieve cart data
-                    Toast.makeText(requireContext(), "Failed to retrieve cart data", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(),"Failed to retrieve cart data",Toast.LENGTH_SHORT
+                    ).show()
                 }
         }
     }
@@ -106,20 +122,37 @@ class CartFragment : Fragment() {
         for (cartItem in cartItemList) {
             val formattedPrice = cartItem.productSp!!.replace(",", "").toIntOrNull()
             if (formattedPrice != null) {
-                totalCost += formattedPrice
+                totalCost += formattedPrice * cartItem.quantity
             }
         }
-        binding.textView1.text = cartItemList.size.toString()
+
+        binding.tvCartItem.text = cartItemList.size.toString()
         binding.tvTotalCost.text = "₹$totalCost"
 
+
         binding.checkoutButton.setOnClickListener {
-            val intent = Intent(context, AddressActivity::class.java)
+
+            val intent = Intent(context, CheckoutActivity::class.java)
+
             val b = Bundle()
             b.putStringArrayList("productIds", list)
             b.putString("totalCost", totalCost.toString())
             intent.putExtras(b)
             startActivity(intent)
+
         }
+
+    }
+
+    override fun onCartItemUpdated(totalCost: Int) {
+        binding.tvTotalCost.text = "₹$totalCost"
+        updateCartSummary(cartItemList)
+    }
+
+    // for the updating cart summary TV
+    override fun onCartItemRemoved(cartItem: CartModel) {
+        // Handle item removal here, if needed
+        updateCartSummary(cartItemList)
     }
 
 

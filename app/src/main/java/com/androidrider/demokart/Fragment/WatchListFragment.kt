@@ -7,7 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.androidrider.demokart.Adapter.ProductAdapter
 import com.androidrider.demokart.Adapter.WatchListAdapter
+import com.androidrider.demokart.Model.ProductModel
 import com.androidrider.demokart.Model.WatchListModel
 import com.androidrider.demokart.R
 import com.androidrider.demokart.databinding.FragmentWatchListBinding
@@ -31,71 +33,50 @@ class WatchListFragment : Fragment() {
         // Access the toolbar view - Show/Hide
         val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
         toolbar.visibility = View.VISIBLE
-
-        /* correct Logic */
-        val preference =requireContext().getSharedPreferences("info", AppCompatActivity.MODE_PRIVATE)
-        val editor = preference.edit()
-        editor.putBoolean("isCart", false)
-        editor.apply()
+//
 
         list = ArrayList()
 
-        getWatchListData()
+        getProducts()
 
         return binding.root
     }
 
-    private fun getWatchListData() {
 
-        val preferences =
-            requireContext().getSharedPreferences("user", AppCompatActivity.MODE_PRIVATE)
+    private fun getProducts() {
+
+        val preferences =requireContext().getSharedPreferences("user", AppCompatActivity.MODE_PRIVATE)
         val currentUserNumber = preferences.getString("number", "")
 
-        if (!currentUserNumber.isNullOrEmpty()) {
-            val cartCollectionRef = Firebase.firestore.collection("Users")
-                .document(currentUserNumber).collection("WatchList")
+        val list = ArrayList<WatchListModel>()
 
+        val watchlistRef = Firebase.firestore.collection("Users")
+            .document(currentUserNumber!!)
+            .collection("WatchList")
 
-            cartCollectionRef.get()
-                .addOnSuccessListener { querySnapshot ->
+        watchlistRef
+            .get().addOnSuccessListener {
+                list.clear()
+                for (doc in it.documents) {
+                    val data = doc.toObject(WatchListModel::class.java)
+                    list.add(data!!)
 
-                    val cartItemList = mutableListOf<WatchListModel>()
+                    binding.progressBar.visibility = View.GONE
+                }
+                binding.watchListRecyclerView.adapter = WatchListAdapter(requireContext(), list, Firebase.firestore, currentUserNumber!!)
 
-                    for (document in querySnapshot) {
-                        val productId = document.id
-                        val productName = document.getString("productName") ?: ""
-                        val productImage = document.getString("productImage") ?: ""
-                        val productSp = document.getString("productSp") ?: ""
-                        val productMrp = document.getString("productMrp") ?: ""
-                        // Retrieve other fields as needed
-
-                        list.clear()
-                        for (data in cartItemList) {
-                            list.add(data.productId!!)
-                        }
-
-                        val cartItem = WatchListModel(productId,productName,productSp,productMrp, productImage )
-                        cartItemList.add(cartItem)
-                    }
-
-                    binding.watchListRecyclerView.adapter = WatchListAdapter(requireContext(), cartItemList, Firebase.firestore, currentUserNumber)
-
-
-                    // Check if the cart is empty and show/hide the message accordingly
-                    val emptyCartMessage = binding.noDataTextView
-                    if (cartItemList.isEmpty()) {
-                        emptyCartMessage.visibility = View.VISIBLE
-                    } else {
-                        emptyCartMessage.visibility = View.GONE
-                    }
+                // Check if the cart is empty and show/hide the message accordingly
+                if (list.isEmpty()) {
+                    binding.noDataTextView.visibility = View.VISIBLE
+                    binding.progressBar.visibility = View.GONE
+                } else {
+                    binding.noDataTextView.visibility = View.GONE
 
                 }
-                .addOnFailureListener {
-                    // Handle the failure to retrieve cart data
-                    Toast.makeText(requireContext(),"Failed to retrieve cart data",Toast.LENGTH_SHORT).show()
-                }
-        }
 
-
+            }
     }
+
+
+
 }

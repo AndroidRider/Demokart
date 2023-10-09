@@ -9,12 +9,15 @@ import android.text.style.StrikethroughSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.androidrider.demokart.Activity.MainActivity
 import com.androidrider.demokart.Activity.ProductDetailActivity
 import com.androidrider.demokart.Model.ProductModel
+import com.androidrider.demokart.R
 import com.androidrider.demokart.databinding.CategoryProductLayoutBinding
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
@@ -51,6 +54,9 @@ class CategoryProductAdapter(val context: Context, val list: ArrayList<ProductMo
         holder.binding.productTitle.text = productName
         holder.binding.tvProductSP.text = "₹$productSp"
 
+        // Convert rating to star rating
+        ProductAdapter.updateStarIcons(holder.starIcons, listData.rating, context)
+
         // Set MRP with strikethrough effect
         val mrpText = "₹$productMrp"
         val spannable = SpannableString(mrpText)
@@ -61,6 +67,7 @@ class CategoryProductAdapter(val context: Context, val list: ArrayList<ProductMo
         holder.itemView.setOnClickListener {
             val intent = Intent(context, ProductDetailActivity::class.java)
             intent.putExtra("id", productId)
+            intent.putExtra("starIcons", listData.rating)
             context.startActivity(intent)
         }
 
@@ -159,5 +166,38 @@ class CategoryProductAdapter(val context: Context, val list: ArrayList<ProductMo
     class ProductCategoryViewHolder(val binding: CategoryProductLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
+        // for star icon
+        var starIcons: List<ImageView> = listOf(
+            itemView.findViewById(R.id.star1),
+            itemView.findViewById(R.id.star2),
+            itemView.findViewById(R.id.star3),
+            itemView.findViewById(R.id.star4),
+            itemView.findViewById(R.id.star5)
+        )
+    }
+
+    // for star icon
+    companion object{
+
+
+        fun updateStarIcons(starIcons: List<ImageView>, rating: Double, context:Context) {
+
+            val fullStarDrawable = ContextCompat.getDrawable(context, R.drawable.ic_star_filled)!!
+            val halfStarDrawable = ContextCompat.getDrawable(context, R.drawable.ic_star_half)!!
+            val emptyStarDrawable = ContextCompat.getDrawable(context, R.drawable.ic_star_empty)!!
+
+            val integerPart = rating.toInt()
+            val decimalPart = rating - integerPart
+
+            for (i in 0 until 5) {
+                if (i < integerPart) {
+                    starIcons[i].setImageDrawable(fullStarDrawable)
+                } else if (i == integerPart && decimalPart >= 0.25) {
+                    starIcons[i].setImageDrawable(halfStarDrawable)
+                } else {
+                    starIcons[i].setImageDrawable(emptyStarDrawable)
+                }
+            }
+        }
     }
 }

@@ -5,6 +5,9 @@ import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.navigation.NavDirections
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
 import com.androidrider.demokart.R
 import com.androidrider.demokart.databinding.ActivityAddressBinding
 import com.androidrider.demokart.databinding.ActivityMainBinding
@@ -24,11 +27,12 @@ class AddressActivity : AppCompatActivity() {
 
         preferences = this.getSharedPreferences("user", MODE_PRIVATE)
 
+        /* Target */
         totalCost = intent.getStringExtra("totalCost")!! // For both CartFragment and ProductDetailActivity
 
         loadUserInfo()
 
-        binding.btnProceed.setOnClickListener {
+        binding.proceedButton.setOnClickListener {
             validateData(
                 binding.edtUserName.text.toString(),
                 binding.edtPhoneNumber.text.toString(),
@@ -68,14 +72,24 @@ class AddressActivity : AppCompatActivity() {
             .update(map)
             .addOnSuccessListener {
 
-                val intent1 = Intent(this, CheckoutActivity::class.java)
-                intent1.putStringArrayListExtra("productIds", intent.getStringArrayListExtra("productIds"))
-                intent1.putExtra("totalCost", totalCost)
+//                val intent1 = Intent(this, CheckoutActivity::class.java)
+//                intent1.putStringArrayListExtra("productIds", intent.getStringArrayListExtra("productIds"))
+//                intent1.putExtra("totalCost", totalCost)
+//
+//                intent1.putExtra("productId", intent.getStringExtra("productId"))
+//                intent1.putExtra("totalCost", totalCost)
+//                startActivity(intent1)
 
-                intent1.putExtra("productId", intent.getStringExtra("productId"))
-                intent1.putExtra("totalCost", totalCost)
-                startActivity(intent1)
 
+                val myIntent = Intent(this, CheckoutActivity::class.java)
+                myIntent.putStringArrayListExtra("productIds", intent.getStringArrayListExtra("productIds"))
+                myIntent.putExtra("totalCost", totalCost)
+
+                myIntent.putExtra("productId", intent.getStringExtra("productId"))
+                myIntent.putExtra("totalCost", totalCost)
+
+                startActivity(myIntent)
+                finish()
 
             }.addOnFailureListener {
                 Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
@@ -99,4 +113,6 @@ class AddressActivity : AppCompatActivity() {
                 Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
             }
     }
+
+
 }

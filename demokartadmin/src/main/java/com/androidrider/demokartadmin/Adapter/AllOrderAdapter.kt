@@ -40,8 +40,9 @@ class AllOrderAdapter(val context: Context, val list: ArrayList<AllOrderModel>) 
 
         val listData = list[position]
 
-        holder.binding.productTitle.text = listData.name
-        holder.binding.productPrice.text = "₹${listData.price}"
+        holder.binding.productTitle.text = listData.productName
+        holder.binding.tvQuantity.text = listData.quantity
+        holder.binding.productPrice.text = "₹${listData.totalPrice}"
 
         // For Image
         val productImage = listData.coverImage

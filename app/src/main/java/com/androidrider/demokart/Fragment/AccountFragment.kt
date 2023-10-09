@@ -12,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.androidrider.demokart.Activity.EditProfileActivity
@@ -41,33 +42,21 @@ class AccountFragment : Fragment() {
         val toolbar = requireActivity().findViewById<MaterialToolbar>(R.id.toolbar)
         toolbar.visibility = View.GONE
 
-        binding.cardView.setOnClickListener {
-            navigateProfile() // Navigate Profile Fragment
-        }
-        binding.myProfile.setOnClickListener {
-            navigateProfile() // Navigate Profile Fragment
-        }
-        binding.myCart.setOnClickListener {
-            findNavController().navigate(R.id.action_accountFragment_to_cartFragment) // Navigate Cart Fragment
-        }
-        binding.myOrder.setOnClickListener {
-            findNavController().navigate(R.id.action_accountFragment_to_myOrderFragment) // Navigate My Order Fragment
-        }
+
 
         // Calling Methods
+        navigation()
         loadUserInfo()
         logout()
 
         return binding.root
     }
 
-    private fun navigateProfile(){
-        findNavController().navigate(R.id.action_accountFragment_to_profileFragment)
-    }
+
 
     private fun loadUserInfo() {
-        val preferences = requireContext().getSharedPreferences("user", MODE_PRIVATE)
 
+        val preferences = requireContext().getSharedPreferences("user", MODE_PRIVATE)
         Firebase.firestore.collection("Users")
             .document(preferences.getString("number", "")!!)
             .get()
@@ -97,13 +86,56 @@ class AccountFragment : Fragment() {
             }
     }
 
+    private fun navigation(){
+
+        binding.profileCardView.setOnClickListener {
+            findNavController().navigate(R.id.action_accountFragment_to_profileFragment) // Navigate Profile Fragment
+        }
+        binding.myProfile.setOnClickListener {
+            findNavController().navigate(R.id.action_accountFragment_to_profileFragment) // Navigate Profile Fragment
+        }
+        binding.myCart.setOnClickListener {
+            findNavController().navigate(R.id.action_accountFragment_to_cartFragment) // Navigate Cart Fragment
+        }
+        binding.myOrder.setOnClickListener {
+            findNavController().navigate(R.id.action_accountFragment_to_myOrderFragment) // Navigate My Order Fragment
+        }
+        binding.aboutUs.setOnClickListener {
+            findNavController().navigate(R.id.action_accountFragment_to_aboutUsFragment) // Navigate About Us Fragment
+        }
+        binding.contactUs.setOnClickListener {
+            findNavController().navigate(R.id.action_accountFragment_to_contactUsFragment) // Navigate Contact Us Fragment
+        }
+        binding.faqs.setOnClickListener {
+            findNavController().navigate(R.id.action_accountFragment_to_FAQsFragment) // Navigate FAQs Fragment
+        }
+        binding.help.setOnClickListener {
+            findNavController().navigate(R.id.action_accountFragment_to_helpAndSupportFragment) // Navigate Help & Support Fragment
+        }
+    }
+
+
     private fun logout() {
         binding.logoutButton.setOnClickListener {
-            sharedPreferences = requireContext().getSharedPreferences("loginPrefs", MODE_PRIVATE)
-            val editor = sharedPreferences.edit()
-            editor.putBoolean("isLoggedIn", false)
-            editor.apply()
-            startActivity(Intent(requireContext(), LoginActivity::class.java))
+            AlertDialog.Builder(requireContext())
+                .setTitle("Logout?")
+                .setMessage("Are you sure you want to logout?")
+                .setIcon(R.drawable.baseline_power_on)
+                .setPositiveButton("Yes") { _, _ ->
+                    // User confirmed to logout
+                    logoutCode()
+                }
+                .setNegativeButton("No", null)
+                .show()
         }
+    }
+
+    private fun logoutCode(){
+        sharedPreferences = requireContext().getSharedPreferences("loginPrefs", MODE_PRIVATE)
+        val editor = sharedPreferences.edit()
+        editor.putBoolean("isLoggedIn", false)
+        editor.apply()
+        startActivity(Intent(requireContext(), LoginActivity::class.java))
+
     }
 }

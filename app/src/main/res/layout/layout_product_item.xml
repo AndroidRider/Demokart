@@ -62,7 +62,7 @@
                     android:layout_marginHorizontal="5dp"
                     android:text="SP"
                     android:textColor="@color/red"
-                    android:textSize="20sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
                     android:fontFamily="@font/nunito_medium"/>
 

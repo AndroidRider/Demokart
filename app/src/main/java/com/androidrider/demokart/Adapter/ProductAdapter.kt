@@ -77,8 +77,6 @@ class ProductAdapter(
     }
 
 
-
-
     inner class AddProductViewHolder(val binding: LayoutProductItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -90,6 +88,7 @@ class ProductAdapter(
             itemView.findViewById(R.id.star4),
             itemView.findViewById(R.id.star5)
         )
+
 
     }
 

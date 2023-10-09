@@ -30,38 +30,15 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         openFragment()
         cartBadgeCountListener()
         notificationBadgeCountListener()
 
-
     }
 
 
-    // Function to show the cart badge
-    private fun showCartBadge(number: Int) {
-        val badge = binding.bottomBar.getOrCreateBadge(R.id.cartFragment)
-        badge.backgroundColor = Color.BLUE
-        badge.badgeTextColor = Color.WHITE
-        badge.isVisible = true
-        badge.number = number
-    }
-    // Function to hide the cart badge
-    fun hideCartBadge() {
-        val badge = binding.bottomBar.getOrCreateBadge(R.id.cartFragment)
-        badge?.isVisible = false
-    }
-    private fun showNotificationBadge(number: Int) {
-        val badge = binding.bottomBar.getOrCreateBadge(R.id.notificationFragment)
-        badge.isVisible = true
-        badge.number = number
-    }
 
-    fun hideNotificationBadge() {
-        val badge = binding.bottomBar.getOrCreateBadge(R.id.notificationFragment)
-        badge?.isVisible = false
-    }
+
 
     // Function to Navigate Fragments
     private fun openFragment() {
@@ -110,6 +87,30 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    // Function to show the cart badge
+    private fun showCartBadge(number: Int) {
+        val badge = binding.bottomBar.getOrCreateBadge(R.id.cartFragment)
+        badge.backgroundColor = Color.BLUE
+        badge.badgeTextColor = Color.WHITE
+        badge.isVisible = true
+        badge.number = number
+    }
+    // Function to hide the cart badge
+    fun hideCartBadge() {
+        val badge = binding.bottomBar.getOrCreateBadge(R.id.cartFragment)
+        badge?.isVisible = false
+    }
+    private fun showNotificationBadge(number: Int) {
+        val badge = binding.bottomBar.getOrCreateBadge(R.id.notificationFragment)
+        badge.isVisible = true
+        badge.number = number
+    }
+    private fun hideNotificationBadge() {
+        val badge = binding.bottomBar.getOrCreateBadge(R.id.notificationFragment)
+        badge?.isVisible = false
+    }
+
     // Function to Live update for badge count
     private fun notificationBadgeCountListener() {
 
@@ -133,8 +134,9 @@ class MainActivity : AppCompatActivity() {
     private fun cartBadgeCountListener() {
 
         val preferences = this.getSharedPreferences("user", MODE_PRIVATE)
-        // Set up a Firestore listener to monitor changes to the cart collection
         val currentUserNumber = preferences.getString("number", "")
+
+
         val cartCollectionRef = Firebase.firestore.collection("Users")
             .document(currentUserNumber!!)
             .collection("Cart")
@@ -152,20 +154,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-//    override fun onBackPressed() {
-//        val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
-//        val navController = navHostFragment!!.findNavController()
-//        // Get the current destination
-//        val currentDestination = navController.currentDestination?.id
-//        // Check if the current destination is not the home fragment
-//        if (currentDestination != R.id.homeFragment) {
-//            // Navigate to the home fragment
-//            navController.navigate(R.id.homeFragment)
-//        } else {
-//            // If already on the home fragment, finish the activity and destroy the app
-//            finishAffinity()
-//        }
-//    }
+
+
 
     override fun onBackPressed() {
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragmentContainer)
@@ -175,36 +165,32 @@ class MainActivity : AppCompatActivity() {
 
         // Check if the current destination is the account fragment
         if (currentDestination == R.id.profileFragment) {
-            // Navigate back within the account fragment's stack
             navController.navigateUp()
-        } else if (currentDestination == R.id.myOrderFragment) {
-            // Navigate back within the account fragment's stack
+
+        }else if (currentDestination == R.id.myOrderFragment) {
             navController.navigateUp()
+
+        }else if (currentDestination == R.id.contactUsFragment) {
+            navController.navigateUp()
+
+        }else if (currentDestination == R.id.aboutUsFragment) {
+            navController.navigateUp()
+
+        }else if (currentDestination == R.id.FAQsFragment) {
+            navController.navigateUp()
+
+        }else if (currentDestination == R.id.helpAndSupportFragment) {
+            navController.navigateUp()
+
         }else if (currentDestination != R.id.homeFragment) {
-            // Navigate to the home fragment for other destinations
             navController.navigate(R.id.homeFragment)
+
         } else {
             // If already on the home fragment, finish the activity and destroy the app
             finishAffinity()
         }
     }
 
-
-
-
-
-
-//    // Function to decrease the notification badge count
-//    private fun decreaseNotificationBadgeCount() {
-//        val badge = binding.bottomBar.getOrCreateBadge(R.id.notificationFragment)
-//        val currentCount = badge.number ?: 0
-//        if (currentCount > 0) {
-//            badge.number = currentCount - 1
-//        }
-//        if (currentCount == 1) {
-//            hideNotificationBadge()
-//        }
-//    }
 
 
 

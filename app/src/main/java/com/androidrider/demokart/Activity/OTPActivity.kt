@@ -19,9 +19,7 @@ import com.google.firebase.auth.PhoneAuthProvider
 class OTPActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityOtpactivityBinding
-    lateinit var progressBar: ProgressBar
-
-    lateinit var dialog : Dialog
+    private lateinit var dialog : Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,11 +42,6 @@ class OTPActivity : AppCompatActivity() {
 
     private fun verifyUser(otp: String) {
 
-//        //Progressbar Code
-//        progressBar = binding.spinKit
-//        val doubleBounce: Sprite = Circle()
-//        progressBar.indeterminateDrawable = doubleBounce
-//        progressBar.visibility = View.VISIBLE
 
         dialog.show()
 
@@ -62,13 +55,13 @@ class OTPActivity : AppCompatActivity() {
             .addOnCompleteListener(this) { task ->
                 if (task.isSuccessful) {
 
+
                     val preferences = this.getSharedPreferences("user", MODE_PRIVATE)
                     val editor = preferences.edit()
 
                     editor.putString("number", intent.getStringExtra("number")!!)
                     editor.apply()
 
-                    progressBar.visibility = View.GONE
                     dialog.dismiss()
                     startActivity(Intent(this@OTPActivity, MainActivity::class.java))
                     finish()

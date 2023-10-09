@@ -8,23 +8,31 @@ import android.text.style.StrikethroughSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.androidrider.demokart.Activity.ProductDetailActivity
+import com.androidrider.demokart.Model.ProductModel
 import com.androidrider.demokart.Model.WatchListModel
 import com.androidrider.demokart.R
 import com.androidrider.demokart.databinding.LayoutProductItemBinding
+import com.androidrider.demokart.databinding.LayoutWatchlistBinding
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 
 class WatchListAdapter(
-    val context: Context, val list: MutableList<WatchListModel>,
+    val context: Context, val list: ArrayList<WatchListModel>,
     val firestore: FirebaseFirestore,
     private val currentUserNumber: String) :
     RecyclerView.Adapter<WatchListAdapter.WatchListViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WatchListViewHolder {
-        val view = LayoutProductItemBinding.inflate(LayoutInflater.from(context), parent, false)
+        val view = LayoutWatchlistBinding.inflate(LayoutInflater.from(context), parent, false)
         return WatchListViewHolder(view)
     }
     override fun getItemCount(): Int {
@@ -35,10 +43,13 @@ class WatchListAdapter(
 
         val listData = list[position]
 
+//        val productId = listData.productId
         val productImage = listData.productImage
         val productName = listData.productName
         val productMrp = listData.productMrp
         val productSp = listData.productSp
+
+        ProductAdapter.updateStarIcons(holder.starIcons, listData.rating, context)
 
         holder.binding.tvProductName.text = productName
         holder.binding.tvProductSp.text = "₹$productSp"
@@ -56,39 +67,50 @@ class WatchListAdapter(
         holder.binding.productImageView.setOnClickListener {
             val intent = Intent(context, ProductDetailActivity::class.java)
             intent.putExtra("id", listData.productId)
+            intent.putExtra("starIcons", listData.rating)
             context.startActivity(intent)
         }
 
+        removeItemFromWatchList(holder, position)
 
-//        holder.binding.Favourite.setOnClickListener {
-//            removeItemFromWatchList(position)
-//        }
 
     }
 
-    private fun removeItemFromWatchList(position: Int) {
 
-        val listData = list[position]
 
-        val productId = listData.productId
-        val cartCollectionRef = firestore.collection("Users")
-            .document(currentUserNumber)
-            .collection("WatchList")
+    private fun removeItemFromWatchList(holder: WatchListViewHolder, position: Int) {
 
-        cartCollectionRef.document(productId!!).delete()
-            .addOnSuccessListener {
-                list.removeAt(position)
-                notifyDataSetChanged()
-            }
-            .addOnFailureListener { e ->
-                // Handle the failure to delete the item from Firestore
-                Log.e("CartAdapter", "Failed to delete item from Firestore: $productId", e)
-            }
+        val productId = list[position].productId
+
+        holder.binding.delete.setOnClickListener {
+
+            val preferences = context.getSharedPreferences("user", AppCompatActivity.MODE_PRIVATE)
+            val currentUserNumber = preferences.getString("number", "")
+
+            val watchlistRef = Firebase.firestore.collection("Users")
+                .document(currentUserNumber!!)
+                .collection("WatchList")
+            // Product is in the watchlist, remove it
+            watchlistRef.document(productId!!).delete()
+                .addOnSuccessListener {
+                    list.removeAt(position)
+                    notifyDataSetChanged()
+
+                    Toast.makeText(context, "Removed from watchlist", Toast.LENGTH_SHORT).show()
+                }
+        }
     }
 
-    class WatchListViewHolder(val binding: LayoutProductItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
+    class WatchListViewHolder(val binding: LayoutWatchlistBinding) : RecyclerView.ViewHolder(binding.root) {
+        // for star icon
+        var starIcons: List<ImageView> = listOf(
+            itemView.findViewById(R.id.star1),
+            itemView.findViewById(R.id.star2),
+            itemView.findViewById(R.id.star3),
+            itemView.findViewById(R.id.star4),
+            itemView.findViewById(R.id.star5)
+        )
     }
+
 
 }

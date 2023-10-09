@@ -42,11 +42,16 @@
                     android:textColor="@color/black"
                     android:textSize="18sp"/>
 
+
+                <include
+                    layout="@layout/rating_layout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
                 <TextView
                     android:id="@+id/tvProductSP"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:text="Price : 1000"
                     android:textColor="@color/red"
                     android:textSize="18sp"

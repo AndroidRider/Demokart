@@ -58,28 +58,22 @@ class RegisterActivity : AppCompatActivity() {
 
     private fun storeData() {
 
-//        //Progressbar Code
-//        val progressBar = binding.spinKit as ProgressBar
-//        val doubleBounce: Sprite = Circle()
-//        progressBar.indeterminateDrawable = doubleBounce
-//        progressBar.visibility = View.VISIBLE
         dialog.show()
 
-        val preferences = this.getSharedPreferences("user", MODE_PRIVATE)
-        val editor = preferences.edit()
+        val name = binding.edtName.text.toString()
+        val phoneNumber = binding.edtPhoneNumber.text.toString()
 
-        editor.putString("number", binding.edtPhoneNumber.text.toString())
-        editor.putString("name", binding.edtName.text.toString())
-        editor.apply()
+//        val preferences = this.getSharedPreferences("user", MODE_PRIVATE)
+//        val editor = preferences.edit()
+//        editor.putString("number", phoneNumber)
+//        editor.apply()
 
-        val data = UserModel(name = binding.edtName.text.toString(),
-            phoneNumber = binding.edtPhoneNumber.text.toString())
+        val data = UserModel(name = name, phoneNumber = phoneNumber)
 
 
-        Firebase.firestore.collection("Users").document(binding.edtPhoneNumber.text.toString())
+        Firebase.firestore.collection("Users").document(phoneNumber)
             .set(data).addOnSuccessListener {
 
-//                progressBar.visibility = GONE
                 dialog.dismiss()
 
                 Toast.makeText(this, "User Register Successfully", Toast.LENGTH_SHORT).show()
@@ -87,7 +81,6 @@ class RegisterActivity : AppCompatActivity() {
 
             }.addOnFailureListener {
 
-//                progressBar.visibility = GONE
                 dialog.dismiss()
                 Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
             }

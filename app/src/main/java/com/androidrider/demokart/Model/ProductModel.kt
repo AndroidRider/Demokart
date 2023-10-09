@@ -14,6 +14,6 @@ data class ProductModel(
     val rating: Double = 0.0,
     val productImages: ArrayList<String> = ArrayList(),
 
-    val checkFavorite: Boolean = false // Default to false
+    var isInWatchlist: Boolean = false,
 
     )

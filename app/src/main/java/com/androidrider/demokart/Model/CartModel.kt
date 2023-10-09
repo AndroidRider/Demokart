@@ -6,5 +6,9 @@ data class CartModel(
     val productSp: String? = "",
     val productMrp: String? = "",
     val productImage : String? = "",
-    // Add other fields as needed
+    val rating : Double = 0.0,
+
+    var quantity: Int = 1 // Set default quantity to 1
+
+
 )

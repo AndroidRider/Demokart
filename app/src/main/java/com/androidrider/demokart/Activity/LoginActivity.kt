@@ -26,10 +26,9 @@ import java.util.concurrent.TimeUnit
 class LoginActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityLoginBinding
-    lateinit var progressBar: ProgressBar
+    private lateinit var sharedPreferences: SharedPreferences
     lateinit var dialog : Dialog
 
-    lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,6 +59,9 @@ class LoginActivity : AppCompatActivity() {
             }else if (phoneNumber.length != 10 ){
                 Toast.makeText(this, "Phone number should be 10 digit", Toast.LENGTH_SHORT).show()
             }else {
+
+                saveUserNumber()
+
                 sendOTP(phoneNumber)
             }
         }
@@ -67,15 +69,10 @@ class LoginActivity : AppCompatActivity() {
 
 
 
+
     private fun sendOTP(number: String) {
 
-        //Progressbar Code
-//        progressBar = binding.spinKit
-//        val doubleBounce: Sprite = Circle()
-//        progressBar.indeterminateDrawable = doubleBounce
-//        progressBar.visibility = View.VISIBLE
         dialog.show()
-
 
         val options = PhoneAuthOptions.newBuilder(FirebaseAuth.getInstance())
             .setPhoneNumber("+91$number") // Phone number to verify
@@ -97,7 +94,6 @@ class LoginActivity : AppCompatActivity() {
 
             saveLoginStatus(true)
 
-//            progressBar.visibility = View.GONE
             dialog.dismiss()
 
             val intent = Intent(this@LoginActivity, OTPActivity::class.java)
@@ -117,9 +113,16 @@ class LoginActivity : AppCompatActivity() {
         editor.apply()
     }
 
+    private fun saveUserNumber() {
+        val phoneNumber = binding.edtPhoneNumber.text.toString()
+        val preferences = this.getSharedPreferences("user", MODE_PRIVATE)
+        val editor = preferences.edit()
+        editor.putString("number", phoneNumber)
+        editor.apply()
+    }
+
     private fun navigateToMain() {
         startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-//        startActivity(Intent(this@LoginActivity, NotificationTestActivity::class.java))
         finish()
     }
 

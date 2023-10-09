@@ -1,229 +1,180 @@
 package com.androidrider.demokart.Activity
 
 
-import android.app.NotificationChannel
-import android.app.NotificationManager
-import android.content.ContentValues.TAG
-import android.content.Context
+import android.content.ContentValues
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.view.View.GONE
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
-import androidx.core.app.NotificationCompat
-import androidx.core.app.NotificationManagerCompat
-import com.androidrider.demokart.R
+import com.androidrider.demokart.Adapter.CheckoutAdapter
+import com.androidrider.demokart.Model.CheckoutModel
 import com.androidrider.demokart.databinding.ActivityCheckoutBinding
-import com.google.firebase.firestore.FieldValue
+import com.bumptech.glide.Glide
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.google.gson.internal.bind.TypeAdapters.URL
-import com.razorpay.Checkout
-import com.razorpay.PaymentResultListener
-import org.json.JSONObject
-import java.net.HttpURLConnection
-import java.net.URL
 
-class CheckoutActivity : AppCompatActivity(), PaymentResultListener {
+class CheckoutActivity : AppCompatActivity() {
 
     lateinit var binding: ActivityCheckoutBinding
+
+    val productsList = mutableListOf<CheckoutModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCheckoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        paymentProcess()
+        val productId = intent.getStringExtra("productId")
+        var productIds = intent.getStringArrayListExtra("productIds") ?: emptyList<String>()
 
-    }
 
-    private fun paymentProcess() {
 
-        val razorpayCheckout = Checkout() // Initialize the Checkout instance here
-        razorpayCheckout.setKeyID("rzp_test_IPDdrnFu7i9Ae0")
+        fetchProductsByIds(productIds!!)
 
-        val price = intent.getStringExtra("totalCost")
-
-        try {
-            val options = JSONObject()
-            options.put("name", "DemoKart")
-            options.put("description", "Best Ecommerce App")
-            //You can omit the image option to fetch the image from the dashboard
-            options.put("image", "https://s3.amazonaws.com/rzp-mobile/images/rzp.jpg")
-            options.put("theme.color", "#3399cc")
-            options.put("currency", "INR")
-            options.put("amount", (price!!.toInt() * 100))//pass amount in currency subunits
-
-            val prefill = JSONObject()
-            prefill.put("email", "mdarfealam15@gmail.com")
-            prefill.put("contact", "7667815236")
-
-            razorpayCheckout.open(this, options)
-        } catch (e: Exception) {
-            Toast.makeText(this, "Error in payment: " + e.message, Toast.LENGTH_LONG).show()
-            e.printStackTrace()
+        if (productId != null) {
+            getSingleProduct(productId)
+            binding.singleDataCard.visibility = View.VISIBLE
+            binding.recyclerView.visibility = GONE
         }
-    }
 
-    override fun onPaymentSuccess(p0: String?) {
-        Toast.makeText(this, "Payment Success", Toast.LENGTH_LONG).show()
-        try {
-            uploadData()
 
-        } catch (e: Exception) {
-            Toast.makeText(this, "onPayment-Error " + e.message, Toast.LENGTH_LONG).show()
-            e.printStackTrace()
+
+
+
+        val totalCost = intent.getStringExtra("totalCost")
+        binding.tvItemPrice.text =  "${totalCost}.00"
+        binding.tvTotalPrice.text = "${totalCost}.00"
+
+        loadUserInfo()
+
+        binding.proceedButton.setOnClickListener {
+
+            val myIntent = Intent(this, PaymentActivity::class.java)
+            myIntent.putStringArrayListExtra("productIds", intent.getStringArrayListExtra("productIds"))
+            myIntent.putExtra("totalCost", totalCost)
+
+            myIntent.putExtra("productId", intent.getStringExtra("productId"))
+            myIntent.putExtra("totalCost", totalCost)
+
+
+            // Add quantity information to the intent
+            val quantityList = ArrayList<String>()
+            for (product in productsList) {
+                quantityList.add((product.quantity ?: "0").toString())
+            }
+            myIntent.putStringArrayListExtra("quantities", quantityList)
+
+
+            startActivity(myIntent)
+
         }
-    }
 
-    private fun uploadData() {
-        try {
-            val productIds = intent.getStringArrayListExtra("productIds")
-            val productId = intent.getStringExtra("productId")
+        binding.imgEdit.setOnClickListener {
 
-            if (productIds != null && !productIds.contains(productId)) {
-                for (currentId in productIds) {
-                    fetchData(currentId)
+//            val intent = Intent(this, AddressActivity::class.java)
+//
+//            val b = Bundle()
+//            b.putString("productId", productId)
+//            b.putString("totalCost", totalCost.toString())
+//            intent.putExtras(b)
+//            startActivity(intent)
 
-                    // Remove the item from the cart
-                    val preferences = this.getSharedPreferences("user", MODE_PRIVATE)
-                    val userId = preferences.getString("number", "")!!
-                    removeItemFromCart(userId, currentId)
-                }
-            } else if (productId != null) {
-                fetchData(productId)
-            }
+            val myIntent = Intent(this, AddressActivity::class.java)
+            myIntent.putStringArrayListExtra("productIds", intent.getStringArrayListExtra("productIds"))
+            myIntent.putExtra("totalCost", totalCost)
 
-        } catch (e: Exception) {
-            Toast.makeText(this, "on Upload Data " + e.message, Toast.LENGTH_LONG).show()
-            e.printStackTrace()
+            myIntent.putExtra("productId", intent.getStringExtra("productId"))
+            myIntent.putExtra("totalCost", totalCost)
+
+            startActivity(myIntent)
+            finish()
+
         }
+
     }
 
-    private fun removeItemFromCart(userId: String, productId: String) {
-        val firestore = Firebase.firestore
-        // Reference to the cart document
-        val cartRef = firestore.collection("Users").document(userId)
-            .collection("Cart").document(productId)
-        // Delete the entire cart document
-        cartRef.delete()
-            .addOnSuccessListener {
-                Log.d(TAG, "Cart document deleted: $productId")
-            }
-            .addOnFailureListener { e ->
-                Log.e(TAG, "Error deleting cart document: $productId", e)
-            }
-    }
+    private fun getSingleProduct(productId: String) {
 
-    private fun fetchData(productId: String?) {
-        try {
             Firebase.firestore.collection("Products")
-                .document(productId!!).get()
+                .document(productId).get()
                 .addOnSuccessListener {
 
-                    saveData(
-                        it.getString("productName"), it.getString("productCoverImage"),
-                        it.getString("productSp"), productId
-                    )
-                }
+                            val productName = it.getString("productName")
+                            val productSP = it.getString("productSp")
+                            val coverImage = it.getString("productCoverImage")
+                            val quantity = "1"
 
-        } catch (e: Exception) {
-            Toast.makeText(this, "on Fetch Data " + e.message, Toast.LENGTH_LONG).show()
-            e.printStackTrace()
-        }
+                            Glide.with(this).load(coverImage).into(binding.imgCart)
 
-    }
+                            binding.cartTvName.text = productName
+                            binding.tvProductSp.text = "₹$productSP"
+                            binding.tvQuantity.text = quantity
 
-    private fun saveData(name: String?, coverImage: String?, price: String?, productId: String) {
-
-        try {
-            val preferences = this.getSharedPreferences("user", MODE_PRIVATE)
-            val data = hashMapOf<String, Any>()
-
-            data["name"] = name!!
-            data["price"] = price!!
-            data["productId"] = productId
-            data["coverImage"] = coverImage!!
-            data["status"] = "Ordered"
-            data["timestamp"] = FieldValue.serverTimestamp()
-            data["userId"] = preferences.getString("number", "")!!
-
-            val firestore = Firebase.firestore.collection("AllOrders")
-            val key = firestore.document().id
-            data["orderId"] = key
-
-            firestore.document(key).set(data)
-                .addOnSuccessListener {
-
-                    // After successfully saving the order, create a notification
-                    createNotification(name, price)
-
-                    Toast.makeText(this, "Order placed", Toast.LENGTH_LONG).show()
-
-                    startActivity(Intent(this, MainActivity::class.java))
-                    finish()
                 }
                 .addOnFailureListener {
-                    Toast.makeText(this, "Something went wrong", Toast.LENGTH_LONG).show()
+                    // Handle errors
+                    Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
                 }
 
-        } catch (e: Exception) {
-            Toast.makeText(this, "on Save Data " + e.message, Toast.LENGTH_LONG).show()
-            e.printStackTrace()
+
+
+    }
+
+    private fun fetchProductsByIds(productIds: List<String>): List<CheckoutModel> {
+
+
+        val preferences = this.getSharedPreferences("user", AppCompatActivity.MODE_PRIVATE)
+        val currentUserNumber = preferences.getString("number", "")
+        // Loop through each product ID and fetch data from Firestore
+        for (productId in productIds) {
+            Firebase.firestore.collection("Users")
+                .document(currentUserNumber!!).collection("Cart")
+                .document(productId)
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    if (documentSnapshot.exists()) {
+                        // Document exists, parse data and add it to the list
+                        val product = documentSnapshot.toObject(CheckoutModel::class.java)
+                        if (product != null) {
+                            // Add the quantity information to the CheckoutModel
+                            productsList.add(product)
+                            binding.recyclerView.adapter = CheckoutAdapter(this, productsList)
+                        }
+                    }
+                }
+                .addOnFailureListener { exception ->
+                    // Handle errors
+                    Log.e(ContentValues.TAG, "Error fetching product with ID $productId: ${exception.message}")
+                }
         }
-
-
+        return productsList
     }
 
-    override fun onPaymentError(p0: Int, p1: String?) {
-        Toast.makeText(this, "Payment Error", Toast.LENGTH_LONG).show()
-    }
+    private fun loadUserInfo() {
 
-    private fun createNotification(name: String, price: String) {
+        val preferences = this.getSharedPreferences("user", AppCompatActivity.MODE_PRIVATE)
+        Firebase.firestore.collection("Users")
+            .document(preferences.getString("number", "")!!)
+            .get().addOnSuccessListener {
 
-        val channelId = "order_notification_channel"
-        val notificationBuilder = NotificationCompat.Builder(this, channelId)
-            .setSmallIcon(R.mipmap.ic_launcher) // Set your notification icon
-            .setContentTitle("Order Placed!")
-            .setContentText("Your order has been successfully placed.")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setStyle(NotificationCompat.BigTextStyle().bigText("Your order $name, Rs.$price has been successfully placed."))
+                binding.tvName.text = it.getString("name")
+                binding.tvNumber.text = it.getString("phoneNumber")
+                binding.tvAddress.text = it.getString("address")
+                binding.tvState.text = it.getString("state")
 
+                val city = it.getString("city")
+                binding.tvCity.text = ", $city"
 
-        // Create a notification channel for devices running Android Oreo and higher
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channelName = "Order Notifications"
-            val channelDescription = "Notifications for placed orders"
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(channelId, channelName, importance).apply {
-                description = channelDescription
+                val pinCode = it.getString("pinCode")
+                binding.tvPinCode.text = "- $pinCode"
+
             }
-            val notificationManager =getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
-        }
-
-        val notificationManagerCompat = NotificationManagerCompat.from(this)
-        if (ActivityCompat.checkSelfPermission(this,android.Manifest.permission.POST_NOTIFICATIONS )
-            != PackageManager.PERMISSION_GRANTED) {
-            return
-        }
-
-        notificationManagerCompat.notify(1, notificationBuilder.build())
-    }
-
-
-    override fun onDestroy() {
-        super.onDestroy()
-        try {
-            unregisterReceiver(null) // Unregister your broadcast receiver here
-        }catch (e: Exception) {
-            // Handle any exceptions if they occur
-        }
+            .addOnFailureListener {
+                Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
+            }
     }
 
 
