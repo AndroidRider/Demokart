@@ -149,7 +149,7 @@ class ProfileFragment : Fragment() {
 
                     // Validating Data
                     textViewEmail.text = if (email!!.isNotEmpty()) email else "Email"
-                    textViewNumber.text = if (phone!!.isNotEmpty()) "+91 $phone" else "Phone"
+                    textViewNumber.text = if (phone!!.isNotEmpty()) phone else "Phone"
                     textViewAddress.text = if (address!!.isNotEmpty()) address else "Address"
                     textViewPinCode.text = if (pinCode!!.isNotEmpty()) "- $pinCode" else ""
 

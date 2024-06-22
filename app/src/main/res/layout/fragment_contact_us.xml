@@ -24,7 +24,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
             android:orientation="vertical"
             tools:context=".Fragment.ContactUsFragment">
 
@@ -39,7 +39,6 @@
                     android:id="@+id/edtUserName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
                     android:hint="Enter your name" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -53,7 +52,6 @@
                     android:id="@+id/edtPhoneNumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:enabled="false"
                     android:hint="Enter phone number"
                     android:inputType="phone" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -92,7 +90,22 @@
                 android:layout_marginVertical="5dp">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/query"
+                    android:id="@+id/edtTopic"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textMultiLine"
+                    android:maxLines="10"
+                    android:hint="Write your Topic" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginVertical="5dp">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtMessage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="textMultiLine"
@@ -102,7 +115,7 @@
 
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/proceedButton"
+                android:id="@+id/submitButton"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_margin="15dp"

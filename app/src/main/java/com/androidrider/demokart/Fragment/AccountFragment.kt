@@ -22,6 +22,7 @@ import com.androidrider.demokart.databinding.FragmentAccountBinding
 import com.androidrider.demokart.databinding.FragmentProfileBinding
 import com.bumptech.glide.Glide
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
@@ -30,7 +31,6 @@ import java.util.UUID
 class AccountFragment : Fragment() {
 
     private lateinit var binding: FragmentAccountBinding
-    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,9 +67,12 @@ class AccountFragment : Fragment() {
 
                 val profileImageUrl = userData?.get("profileImage") as? String
                 val phone = userData?.get("phoneNumber") as? String
+                val name = userData?.get("name") as? String
 
-                binding.textViewName.text = userData?.get("name") as? String
-                binding.textViewNumber.text = if (phone!!.isNotEmpty()) "+91 $phone" else "Phone"
+                binding.textViewName.text = if (name!!.isNotEmpty()) name else "Welcome!"
+                binding.textViewNumber.text = if (phone!!.isNotEmpty()) phone else "Phone"
+
+
 
                 // using the 'let' extension function to conditionally load an image into an ImageView using Glide.
                 // If the profileImageUrl is not null, Glide is used to load the image; otherwise, a default drawable is set.
@@ -131,11 +134,21 @@ class AccountFragment : Fragment() {
     }
 
     private fun logoutCode(){
-        sharedPreferences = requireContext().getSharedPreferences("loginPrefs", MODE_PRIVATE)
-        val editor = sharedPreferences.edit()
-        editor.putBoolean("isLoggedIn", false)
-        editor.apply()
+        Firebase.auth.signOut()
         startActivity(Intent(requireContext(), LoginActivity::class.java))
-
     }
+
+
+
+    //with testing number
+//    private fun logoutCode(){
+//        val sharedPreferences = requireContext().getSharedPreferences("loginPrefs", MODE_PRIVATE)
+//        val editor = sharedPreferences.edit()
+//        editor.putBoolean("isLoggedIn", false)
+//        editor.apply()
+//        startActivity(Intent(requireContext(), LoginActivity::class.java))
+//    }
+
+
+
 }

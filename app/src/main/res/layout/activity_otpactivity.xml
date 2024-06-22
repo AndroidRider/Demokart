@@ -18,23 +18,12 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.04000002" />
 
-<!--    <com.github.ybq.android.spinkit.SpinKitView-->
-<!--        android:id="@+id/spinKit"-->
-<!--        style="@style/SpinKitView.Large.Circle"-->
-<!--        android:layout_width="70dp"-->
-<!--        android:layout_height="70dp"-->
-<!--        app:SpinKit_Color="#C51162"-->
-<!--        android:visibility="gone"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.7" />-->
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginTop="80dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -58,6 +47,16 @@
                     android:hint="OTP"
                     android:inputType="phone" />
             </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:id="@+id/tvResendOTP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="10dp"
+                android:layout_marginStart="15dp"
+                android:text="Resend OTP"
+                android:textColor="#5C6BC0"
+                android:textSize="18sp"/>
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btnVerifyOTP"

@@ -45,8 +45,8 @@ class CheckoutActivity : AppCompatActivity() {
 
 
         val totalCost = intent.getStringExtra("totalCost")
-        binding.tvItemPrice.text =  "${totalCost}.00"
-        binding.tvTotalPrice.text = "${totalCost}.00"
+        binding.tvItemPrice.text =  "₹${totalCost}.00"
+        binding.tvTotalPrice.text = "₹${totalCost}.00"
 
         loadUserInfo()
 

@@ -164,7 +164,7 @@ class AddProductFragment : Fragment() {
                 it.storage.downloadUrl.addOnSuccessListener { image ->
                     listImages.add(image.toString())
                     if (list.size == listImages.size) {
-                        storedata()
+                        storeData()
                     } else {
                         i++
                         uploadProductImage()
@@ -181,7 +181,7 @@ class AddProductFragment : Fragment() {
             }
     }
 
-    private fun storedata() {
+    private fun storeData() {
         val db = Firebase.firestore.collection("Products")
         val key = db.document().id
         val data = ProductModel(

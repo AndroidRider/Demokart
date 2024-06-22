@@ -37,6 +37,15 @@
                 android:textStyle="bold"/>
 
             <TextView
+                android:layout_gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Android Developer"
+                android:textColor="#fff"
+                android:textSize="16sp"
+                android:textStyle="bold"/>
+
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
@@ -53,7 +62,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="280dp">
+            android:layout_marginTop="295dp">
 
             <LinearLayout
                 android:layout_width="300dp"

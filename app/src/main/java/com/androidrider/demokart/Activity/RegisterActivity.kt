@@ -14,6 +14,7 @@ import com.androidrider.demokart.databinding.ActivityRegisterBinding
 import com.github.ybq.android.spinkit.sprite.Sprite
 import com.github.ybq.android.spinkit.style.Circle
 import com.github.ybq.android.spinkit.style.DoubleBounce
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
@@ -21,8 +22,8 @@ import com.google.firebase.ktx.Firebase
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
+    private lateinit var dialog : Dialog
 
-    lateinit var dialog : Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,30 +58,16 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     private fun storeData() {
-
         dialog.show()
-
         val name = binding.edtName.text.toString()
         val phoneNumber = binding.edtPhoneNumber.text.toString()
-
-//        val preferences = this.getSharedPreferences("user", MODE_PRIVATE)
-//        val editor = preferences.edit()
-//        editor.putString("number", phoneNumber)
-//        editor.apply()
-
         val data = UserModel(name = name, phoneNumber = phoneNumber)
-
-
         Firebase.firestore.collection("Users").document(phoneNumber)
             .set(data).addOnSuccessListener {
-
                 dialog.dismiss()
-
                 Toast.makeText(this, "User Register Successfully", Toast.LENGTH_SHORT).show()
                 openLogin()
-
             }.addOnFailureListener {
-
                 dialog.dismiss()
                 Toast.makeText(this, "Something went wrong", Toast.LENGTH_SHORT).show()
             }

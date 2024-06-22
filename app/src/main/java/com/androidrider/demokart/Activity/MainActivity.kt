@@ -37,9 +37,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-
-
     // Function to Navigate Fragments
     private fun openFragment() {
 
