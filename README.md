@@ -3,25 +3,45 @@ DemoKart is a sophisticated mobile e-commerce platform developed using Kotlin an
 It enables users to explore a diverse range of products, manage their shopping cart, bookmark favorite items, 
 securely process payments via Razorpay, receive real-time notifications, manage profiles, review order history, and easily navigate through product categories.
 
+
+
+
 # Screenshot
 <p>
-  <img src="https://user-images.githubusercontent.com/140700822/263239140-ad23f34b-e37b-4332-8452-116ff18fc82c.png" alt="feed example" width = "200" >
+<img src="https://github.com/AndroidRider/Demokart/assets/140700822/64a93189-f31a-4908-93d3-678c02b9bc09.png" alt="feed example" width = "200" >
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+  <img src="https://github.com/AndroidRider/Demokart/assets/140700822/7d1803a4-74c6-416b-ba69-c1432af4bce1.png" alt="feed example" width = "200" >
   &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-  <img src="https://user-images.githubusercontent.com/140700822/263239194-f0338e7a-b27a-486a-be67-352f8ff0c291.png" alt="feed example" width = "200" >
+  <img src="https://github.com/AndroidRider/Demokart/assets/140700822/40522e2a-67de-4c8d-87a0-7e604fbe8207.png" alt="feed example" width = "200" >
   &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-  <img src="https://user-images.githubusercontent.com/140700822/263239220-ceacabc0-6cb9-4e73-a3b6-e1c7f8e1f946.png" alt="feed example" width = "200" >
+  <img src="https://github.com/AndroidRider/Demokart/assets/140700822/b7ff0b62-96a2-4c5d-8524-c510c3e3376b.png" alt="feed example" width = "200" >
   &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-  <img src="https://user-images.githubusercontent.com/140700822/263239251-90a4acf0-fa89-4b2a-921a-ebc2a2652ef6.png" alt="feed example" width = "200" >
+  <img src="https://github.com/AndroidRider/Demokart/assets/140700822/e76395c7-3244-4002-8b67-067bb5a8933b.png" alt="feed example" width = "200" >
   &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-  <img src="https://user-images.githubusercontent.com/140700822/263239268-a9bc75bd-47ea-4915-adec-26ca58bf8776.png" alt="feed example" width = "200" >
+  <img src="https://github.com/AndroidRider/Demokart/assets/140700822/376afdc6-ec5a-4202-9fc8-ee05fe5ac318.png" alt="feed example" width = "200" >
   &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-  <img src="https://user-images.githubusercontent.com/140700822/263239330-670d4dfc-9355-4add-b24b-64ca07d48be6.png" alt="feed example" width = "200" >
+  <img src="https://github.com/AndroidRider/Demokart/assets/140700822/b27d715f-a575-4ef1-8340-3a43a2b0c907.png" alt="feed example" width = "200" >
   &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-  <img src="https://user-images.githubusercontent.com/140700822/263239395-07cc39fa-ea91-4c32-9f56-cdc18fd100bd.png" alt="feed example" width = "200" >
+  <img src="https://github.com/AndroidRider/Demokart/assets/140700822/0d108e60-1fad-456d-bdb7-79ac046fa210.png" alt="feed example" width = "200" >
   &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-  <img src="https://user-images.githubusercontent.com/140700822/263239426-5b94939e-9f36-4dde-8c33-091132b8747e.png" alt="feed example" width = "200" >
+  <img src="https://github.com/AndroidRider/Demokart/assets/140700822/81037cc3-1ad4-4d9d-9f18-20607f18e13e.png" alt="feed example" width = "200" >
   &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-  <img src="https://user-images.githubusercontent.com/140700822/263239473-53b92a43-399d-45aa-99ec-d98f3ffc199e.png" alt="feed example" width = "200" >
+  <img src="https://github.com/AndroidRider/Demokart/assets/140700822/6d3fb179-0230-45f9-95db-6a9c5a5a945a.png" alt="feed example" width = "200" >
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+  <img src="https://github.com/AndroidRider/Demokart/assets/140700822/aa109281-ae07-417f-9f62-e2c89377682c.png" alt="feed example" width = "200" >
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+  <img src="https://github.com/AndroidRider/Demokart/assets/140700822/ae5f512f-3de1-4e8f-80f6-0360bff689b5.png" alt="feed example" width = "200" >
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+  <img src="https://github.com/AndroidRider/Demokart/assets/140700822/c32c7919-1a4e-492c-9a6b-b263c834779e.png" alt="feed example" width = "200" >
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+  <img src="https://github.com/AndroidRider/Demokart/assets/140700822/c5652702-730c-4ff1-b6d0-0cf6318f7b1a.png" alt="feed example" width = "200" >
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+  <img src="https://github.com/AndroidRider/Demokart/assets/140700822/d862b7c9-2755-405f-908c-0007d85dac17.png" alt="feed example" width = "200" >
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+  <img src="https://github.com/AndroidRider/Demokart/assets/140700822/a4169f4c-e75e-4d21-b5bb-d46bf5e628ac.png" alt="feed example" width = "200" >
+  &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+  <img src="https://github.com/AndroidRider/Demokart/assets/140700822/1de9a0e2-2504-4527-9cc0-f07f36156d51.png" alt="feed example" width = "200" >
+    
 </p>
 
 # Features:
